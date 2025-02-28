@@ -230,6 +230,14 @@ instance MonoFoldable (Maybe a) where
     monoFoldMap :: Monoid m => (a -> m) -> Maybe a -> m
     monoFoldMap = maybe mempty
 
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> Maybe a -> b
+    monoFoldr = foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> Maybe a -> b
+    monoFoldl = foldl'
+
     {-# INLINE monoNull #-}
     monoNull :: Maybe a -> Bool
     monoNull = isNothing
@@ -246,6 +254,14 @@ instance MonoFoldable (Either e a) where
     {-# INLINE monoFoldMap #-}
     monoFoldMap :: Monoid m => (a -> m) -> Either e a -> m
     monoFoldMap = either (const mempty)
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> Either e a -> b
+    monoFoldr = foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> Either e a -> b
+    monoFoldl = foldl'
 
     {-# INLINE monoNull #-}
     monoNull :: Either e a -> Bool
