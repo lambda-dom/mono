@@ -17,7 +17,7 @@ module Data.Types.Bits (
 
 -- Imports.
 -- Base.
-import Data.Bits (FiniteBits (..), zeroBits, (.|.), testBit)
+import Data.Bits (FiniteBits (..), (.|.), testBit, zeroBits)
 import qualified Data.Bits as Bits (bit)
 import Data.Foldable (Foldable (foldl'))
 
@@ -32,23 +32,16 @@ newtype Bits w = Bits w
 
 
 -- Instances.
-instance FiniteBits w => Semigroup (Bits w) where
-    (<>) :: Bits w -> Bits w -> Bits w
-    (<>) (Bits n) (Bits m) = Bits $ n .|. m
-
-instance FiniteBits w => Monoid (Bits w) where
-    mempty :: Bits w
-    mempty = Bits zeroBits
-
 instance FiniteBits w => MonoFunctor (Bits w) where
     type ElementOf (Bits w) = Bool
 
     monomap :: (Bool -> Bool) -> Bits w -> Bits w
     monomap f (Bits n) =
-        foldl'
-            (<>)
-            mempty
-            [if f (testBit n i) then bit (fromIntegral i) else mempty | i <- [0 .. finiteBitSize n]]
+        Bits $
+            foldl'
+                (.|.)
+                zeroBits
+                [if f (testBit n i) then Bits.bit i else zeroBits | i <- [0 .. finiteBitSize n]]
 
 
 {- | Construct a 'Bits' value with the ith bit enabled. -}

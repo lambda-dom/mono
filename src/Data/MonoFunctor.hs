@@ -22,6 +22,8 @@ import qualified Data.Text as Text (Text, map)
 import qualified Data.Text.Lazy as LazyText (Text, map)
 import Data.Sequence (Seq)
 import Data.Vector (Vector)
+import qualified Data.Vector.Strict as StrictVector (Vector)
+import qualified Data.Vector.Unboxed as UnboxedVector (Vector, Unbox, map)
 
 
 {- | The typeclass for monofunctors, the monomorphic version of 'Functor'. -}
@@ -96,3 +98,15 @@ instance MonoFunctor (Vector a) where
 
     monomap :: (a -> a) -> Vector a -> Vector a
     monomap = fmap
+
+instance MonoFunctor (StrictVector.Vector a) where
+    type ElementOf (StrictVector.Vector a) = a
+
+    monomap :: (a -> a) -> StrictVector.Vector a -> StrictVector.Vector a
+    monomap = fmap
+
+instance UnboxedVector.Unbox a => MonoFunctor (UnboxedVector.Vector a) where
+    type ElementOf (UnboxedVector.Vector a) = a
+
+    monomap :: (a -> a) -> UnboxedVector.Vector a -> UnboxedVector.Vector a
+    monomap = UnboxedVector.map

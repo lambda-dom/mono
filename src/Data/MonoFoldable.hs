@@ -24,6 +24,8 @@ import qualified Data.Text as Text (Text, unpack, null, length)
 import qualified Data.Text.Lazy as LazyText (Text, unpack, null, length)
 import Data.Sequence (Seq)
 import Data.Vector (Vector)
+import qualified Data.Vector.Strict as StrictVector (Vector)
+import qualified Data.Vector.Unboxed as UnboxedVector (Vector, Unbox, toList, null, length, foldMap', foldl', foldr)
 
 -- Package.
 import Data.MonoFunctor (MonoFunctor (..))
@@ -248,3 +250,53 @@ instance MonoFoldable (Vector a) where
     {-# INLINE monoLength #-}
     monoLength :: Vector a -> Word
     monoLength = fromIntegral . length
+
+instance MonoFoldable (StrictVector.Vector a) where
+    {-# INLINE monoToList #-}
+    monoToList :: StrictVector.Vector a -> [a]
+    monoToList = toList
+
+    {-# INLINE monoFoldMap #-}
+    monoFoldMap :: Monoid m => (a -> m) -> StrictVector.Vector a -> m
+    monoFoldMap f = foldl' (<>) mempty . fmap f
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> StrictVector.Vector a -> b
+    monoFoldr = foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> StrictVector.Vector a -> b
+    monoFoldl = foldl'
+
+    {-# INLINE monoNull #-}
+    monoNull :: StrictVector.Vector a -> Bool
+    monoNull = null
+
+    {-# INLINE monoLength #-}
+    monoLength :: StrictVector.Vector a -> Word
+    monoLength = fromIntegral . length
+
+instance UnboxedVector.Unbox a => MonoFoldable (UnboxedVector.Vector a) where
+    {-# INLINE monoToList #-}
+    monoToList :: UnboxedVector.Vector a -> [a]
+    monoToList = UnboxedVector.toList
+
+    {-# INLINE monoFoldMap #-}
+    monoFoldMap :: Monoid m => (a -> m) -> UnboxedVector.Vector a -> m
+    monoFoldMap = UnboxedVector.foldMap'
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> UnboxedVector.Vector a -> b
+    monoFoldr = UnboxedVector.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> UnboxedVector.Vector a -> b
+    monoFoldl = UnboxedVector.foldl'
+
+    {-# INLINE monoNull #-}
+    monoNull :: UnboxedVector.Vector a -> Bool
+    monoNull = UnboxedVector.null
+
+    {-# INLINE monoLength #-}
+    monoLength :: UnboxedVector.Vector a -> Word
+    monoLength = fromIntegral . UnboxedVector.length
