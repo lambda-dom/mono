@@ -45,12 +45,12 @@ class MonoFunctor f => MonoFoldable f where
     monofoldMap :: Monoid m => (ElementOf f -> m) -> f -> m
     monofoldMap f = foldl' (<>) mempty . fmap f . monotoList
 
-    {- | Lazy right-associative fold of a monomorphic container. -}
+    {- | Lazy right-associative fold of a monofoldable. -}
     {-# INLINE monofoldr #-}
     monofoldr :: (ElementOf f -> a -> a) -> a -> f -> a
     monofoldr f x = foldr f x . monotoList
 
-    {- | Right-associative, strict in the accumulator, fold of a monomorphic container. -}
+    {- | Right-associative, strict in the accumulator, fold of a monofoldable. -}
     {-# INLINE monofoldl #-}
     monofoldl :: (a -> ElementOf f -> a) -> a -> f -> a
     monofoldl f x = foldl' f x . monotoList
