@@ -52,4 +52,4 @@ library
         Data.MonoFunctor
         Data.MonoFoldable
         Data.Types.MonoCompose
-        Data.Types.Bits
+        Data.Types.IntegralBits
