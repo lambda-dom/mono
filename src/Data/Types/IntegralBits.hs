@@ -39,8 +39,8 @@ instance FiniteBits n => MonoFunctor (IntegralBits n) where
             [if f (testBit n i) then bit i else zeroBits | i <- [0 .. finiteBitSize n]]
 
 instance (Eq n, FiniteBits n) => MonoFoldable (IntegralBits n) where
-    {-# INLINE monoToList #-}
-    monoToList :: IntegralBits n -> [Bool]
+    {-# INLINE monotoList #-}
+    monotoList :: IntegralBits n -> [Bool]
     monoToList n = [testBit n i | i <- [0 .. finiteBitSize n]]
 
     {-# INLINE monoNull #-}
