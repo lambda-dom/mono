@@ -6,7 +6,7 @@ The @IntegralBits@ newtype-wrapper type.
 
 module Data.Types.IntegralBits (
     -- * Types.
-    IntegralBits (..),
+    IntegralBits,
 ) where
 
 -- Imports.
