@@ -1,0 +1,55 @@
+cabal-version:      3.0
+name:               mono
+version:            0.1.0.0
+synopsis:           Monomorphic versions of typeclasses Functor, Foldable and Traversable.
+description:        Please see the README on GitHub at <https://github.com/lambda-dom/mono#readme>
+category:           Data
+homepage:           https://github.com/lambda-dom/mono#readme
+author:             lambda-dom
+license:            BSD-3-Clause
+license-file:       LICENSE
+maintainer:         grodrigues.math@gmail.com
+copyright:          2025 G. Rodrigues
+build-type:         Simple
+extra-source-files:
+extra-doc-files:
+    LICENSE
+    README.md
+    CHANGELOG.md
+
+source-repository head
+    type: git
+    location: https://github.com/lambda-dom/mono
+
+library
+    hs-source-dirs:
+        src
+    default-language: GHC2021
+    default-extensions:
+        DerivingStrategies
+        TypeFamilies
+    build-depends:
+        -- GHC 9.6
+        base >=4.18 && <4.19,
+        bytestring >=0.11 && <0.13,
+        text >=2.0 && <2.2,
+        containers >=0.6 && <0.8,
+        vector >=0.13 && <0.14,
+    ghc-options:
+        -Wall
+        -Wcompat
+        -Widentities
+        -Wincomplete-record-updates
+        -Wincomplete-uni-patterns
+        -Wmissing-export-lists
+        -Wmissing-home-modules
+        -Wpartial-fields
+        -Wredundant-constraints
+        -Wmissing-deriving-strategies
+        -Wunused-packages
+    other-modules:
+    exposed-modules:
+        Data.MonoFunctor
+        Data.MonoFoldable
+        Data.Types.MonoCompose
+        Data.Types.Bits
