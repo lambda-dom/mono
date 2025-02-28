@@ -1,7 +1,7 @@
 {- |
 Module: Data.Types.IntegralBits
 
-The @Bits@ newtype-wrapper type.
+The @IntegralBits@ newtype-wrapper type.
 -}
 
 module Data.Types.IntegralBits (
@@ -21,33 +21,32 @@ import Data.MonoFoldable (MonoFoldable (..))
 
 
 {- | Constructing integral values bit by bit. -}
-newtype IntegralBits w = IntegralBits w
+newtype IntegralBits n = IntegralBits n
     deriving stock (Eq, Ord, Bounded, Ix)
     deriving newtype (Show, Enum, Num, Real, Integral, Bits, FiniteBits)
 
 
 -- Instances.
-instance FiniteBits w => MonoFunctor (IntegralBits w) where
-    type ElementOf (IntegralBits w) = Bool
+instance FiniteBits n => MonoFunctor (IntegralBits n) where
+    type ElementOf (IntegralBits n) = Bool
 
     {-# INLINE monomap #-}
-    monomap :: (Bool -> Bool) -> IntegralBits w -> IntegralBits w
-    monomap f (IntegralBits n) =
-        IntegralBits $
-            foldl'
-                (.|.)
-                zeroBits
-                [if f (testBit n i) then bit i else zeroBits | i <- [0 .. finiteBitSize n]]
+    monomap :: (Bool -> Bool) -> IntegralBits n -> IntegralBits n
+    monomap f n =
+        foldl'
+            (.|.)
+            zeroBits
+            [if f (testBit n i) then bit i else zeroBits | i <- [0 .. finiteBitSize n]]
 
-instance (Eq w, FiniteBits w) => MonoFoldable (IntegralBits w) where
+instance (Eq n, FiniteBits n) => MonoFoldable (IntegralBits n) where
     {-# INLINE monoToList #-}
-    monoToList :: IntegralBits w -> [Bool]
-    monoToList (IntegralBits n) = [testBit n i | i <- [0 .. finiteBitSize n]]
+    monoToList :: IntegralBits n -> [Bool]
+    monoToList n = [testBit n i | i <- [0 .. finiteBitSize n]]
 
     {-# INLINE monoNull #-}
-    monoNull :: IntegralBits w -> Bool
-    monoNull (IntegralBits n) = n == zeroBits
+    monoNull :: IntegralBits n -> Bool
+    monoNull = const False
 
     {-# INLINE monoLength #-}
-    monoLength :: IntegralBits w -> Word
-    monoLength (IntegralBits n) = fromIntegral $ finiteBitSize n
+    monoLength :: IntegralBits n -> Word
+    monoLength = fromIntegral . finiteBitSize
