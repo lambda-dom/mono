@@ -31,18 +31,22 @@ instance (Functor f, MonoFunctor a) => MonoFunctor (MonoCompose f a) where
     monomap f (MonoCompose xs) = MonoCompose (fmap (monomap f) xs)
 
 instance (Functor f, Foldable f, MonoFoldable a) => MonoFoldable (MonoCompose f a) where
-    {-# INLINE monoToList #-}
-    monoToList :: MonoCompose f a -> [ElementOf a]
-    monoToList (MonoCompose xs) = concat $ toList (fmap monoToList xs)
+    {-# INLINE monotoList #-}
+    monotoList :: MonoCompose f a -> [ElementOf a]
+    monotoList (MonoCompose xs) = concatMap monotoList $ toList xs
 
-    {-# INLINE monoFoldMap #-}
-    monoFoldMap :: Monoid m => (ElementOf a -> m) -> MonoCompose f a -> m
-    monoFoldMap f (MonoCompose xs) = foldl' (<>) mempty $ fmap (monoFoldMap f) xs
+    {-# INLINE monofoldMap #-}
+    monofoldMap :: Monoid m => (ElementOf a -> m) -> MonoCompose f a -> m
+    monofoldMap f (MonoCompose xs) = foldl' (<>) mempty . fmap (monofoldMap f) $ toList xs
 
-    {-# INLINE monoNull #-}
-    monoNull :: MonoCompose f a -> Bool
-    monoNull (MonoCompose xs) = foldl' (&&) True $ fmap monoNull xs
+    {-# INLINE mononull #-}
+    mononull :: MonoCompose f a -> Bool
+    mononull (MonoCompose xs) = foldl' (&&) True . fmap mononull $ toList xs
 
-    {-# INLINE monoLength #-}
-    monoLength :: MonoCompose f a -> Word
-    monoLength (MonoCompose xs) = foldl' (+) 0 $ fmap monoLength xs
+    {-# INLINE monolength #-}
+    monolength :: MonoCompose f a -> Word
+    monolength (MonoCompose xs) = foldl' (+) 0 . fmap monolength $ toList xs
+
+    {-# INLINE monoelem #-}
+    monoelem :: Eq (ElementOf a) => ElementOf a -> MonoCompose f a -> Bool
+    monoelem x (MonoCompose xs) = foldl' (||) False . fmap (x `monoelem`) $ toList xs
