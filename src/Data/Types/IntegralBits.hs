@@ -50,3 +50,7 @@ instance (Eq n, FiniteBits n) => MonoFoldable (IntegralBits n) where
     {-# INLINE monolength #-}
     monolength :: IntegralBits n -> Word
     monolength = fromIntegral . finiteBitSize
+
+    {-# INLINE monoelem #-}
+    monoelem :: Bool -> IntegralBits n -> Bool
+    monoelem b n = if b then n /= zeroBits else n /= complement zeroBits
