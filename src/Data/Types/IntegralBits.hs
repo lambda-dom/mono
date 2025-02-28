@@ -41,12 +41,12 @@ instance FiniteBits n => MonoFunctor (IntegralBits n) where
 instance (Eq n, FiniteBits n) => MonoFoldable (IntegralBits n) where
     {-# INLINE monotoList #-}
     monotoList :: IntegralBits n -> [Bool]
-    monoToList n = [testBit n i | i <- [0 .. finiteBitSize n]]
+    monotoList n = [testBit n i | i <- [0 .. finiteBitSize n]]
 
-    {-# INLINE monoNull #-}
-    monoNull :: IntegralBits n -> Bool
-    monoNull = const False
+    {-# INLINE mononull #-}
+    mononull :: IntegralBits n -> Bool
+    mononull = const False
 
-    {-# INLINE monoLength #-}
-    monoLength :: IntegralBits n -> Word
-    monoLength = fromIntegral . finiteBitSize
+    {-# INLINE monolength #-}
+    monolength :: IntegralBits n -> Word
+    monolength = fromIntegral . finiteBitSize
