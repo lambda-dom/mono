@@ -7,12 +7,6 @@ The @Bits@ newtype-wrapper type.
 module Data.Types.Bits (
     -- * Types.
     Bits (..),
-
-    -- ** Constructors.
-    bit,
-
-    -- * Functions.
-    bitNumber,
 ) where
 
 -- Imports.
@@ -20,14 +14,16 @@ module Data.Types.Bits (
 import Data.Bits (FiniteBits (..), (.|.), testBit, zeroBits)
 import qualified Data.Bits as Bits (bit)
 import Data.Foldable (Foldable (foldl'))
+import Data.Ix (Ix)
 
 -- Package.
 import Data.MonoFunctor (MonoFunctor (..))
+import Data.MonoFoldable (MonoFoldable (..))
 
 
 {- | Constructing integral values bit by bit. -}
 newtype Bits w = Bits w
-    deriving stock (Eq, Ord, Bounded)
+    deriving stock (Eq, Ord, Bounded, Ix)
     deriving newtype (Show)
 
 
@@ -35,6 +31,7 @@ newtype Bits w = Bits w
 instance FiniteBits w => MonoFunctor (Bits w) where
     type ElementOf (Bits w) = Bool
 
+    {-# INLINE monomap #-}
     monomap :: (Bool -> Bool) -> Bits w -> Bits w
     monomap f (Bits n) =
         Bits $
@@ -43,12 +40,15 @@ instance FiniteBits w => MonoFunctor (Bits w) where
                 zeroBits
                 [if f (testBit n i) then Bits.bit i else zeroBits | i <- [0 .. finiteBitSize n]]
 
+instance (Eq w, FiniteBits w) => MonoFoldable (Bits w) where
+    {-# INLINE monoToList #-}
+    monoToList :: Bits w -> [Bool]
+    monoToList (Bits n) = [testBit n i | i <- [0 .. finiteBitSize n]]
 
-{- | Construct a 'Bits' value with the ith bit enabled. -}
-bit :: FiniteBits w => Word -> Bits w
-bit = Bits . Bits.bit . fromIntegral
+    {-# INLINE monoNull #-}
+    monoNull :: Bits w -> Bool
+    monoNull (Bits n) = n == zeroBits
 
-
-{- | Return the number of bits in a @'Bits' w@. -}
-bitNumber :: FiniteBits w => Bits w -> Word
-bitNumber (Bits n) = fromIntegral $ finiteBitSize n
+    {-# INLINE monoLength #-}
+    monoLength :: Bits w -> Word
+    monoLength (Bits n) = fromIntegral $ finiteBitSize n
