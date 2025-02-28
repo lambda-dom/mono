@@ -35,6 +35,10 @@ instance (Functor f, Foldable f, MonoFoldable a) => MonoFoldable (MonoCompose f 
     monoToList :: MonoCompose f a -> [ElementOf a]
     monoToList (MonoCompose xs) = concat $ toList (fmap monoToList xs)
 
+    {-# INLINE monoFoldMap #-}
+    monoFoldMap :: Monoid m => (ElementOf a -> m) -> MonoCompose f a -> m
+    monoFoldMap f (MonoCompose xs) = foldl' (<>) mempty $ fmap (monoFoldMap f) xs
+
     {-# INLINE monoNull #-}
     monoNull :: MonoCompose f a -> Bool
     monoNull (MonoCompose xs) = foldl' (&&) True $ fmap monoNull xs

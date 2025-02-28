@@ -18,10 +18,14 @@ import Data.Word (Word8)
 -- Libraries.
 import qualified Data.ByteString as Bytes (ByteString, map)
 import qualified Data.ByteString.Lazy as LazyBytes (ByteString, map)
+import qualified Data.ByteString.Short as ShortBytes (ShortByteString, map)
 import qualified Data.Text as Text (Text, map)
 import qualified Data.Text.Lazy as LazyText (Text, map)
 import Data.Sequence (Seq)
 import Data.Vector (Vector)
+import qualified Data.Vector.Strict as StrictVector (Vector)
+import qualified Data.Vector.Unboxed as UnboxedVector (Vector, Unbox, map)
+import qualified Data.Vector.Storable as StorableVector (Vector, Storable, map)
 
 
 {- | The typeclass for monofunctors, the monomorphic version of 'Functor'. -}
@@ -47,6 +51,12 @@ instance MonoFunctor LazyBytes.ByteString where
 
     monomap :: (Word8 -> Word8) -> LazyBytes.ByteString -> LazyBytes.ByteString
     monomap = LazyBytes.map
+
+instance MonoFunctor ShortBytes.ShortByteString where
+    type ElementOf ShortBytes.ShortByteString = Word8
+
+    monomap :: (Word8 -> Word8) -> ShortBytes.ShortByteString -> ShortBytes.ShortByteString
+    monomap = ShortBytes.map
 
 instance MonoFunctor Text.Text where
     type ElementOf Text.Text = Char
@@ -96,3 +106,21 @@ instance MonoFunctor (Vector a) where
 
     monomap :: (a -> a) -> Vector a -> Vector a
     monomap = fmap
+
+instance MonoFunctor (StrictVector.Vector a) where
+    type ElementOf (StrictVector.Vector a) = a
+
+    monomap :: (a -> a) -> StrictVector.Vector a -> StrictVector.Vector a
+    monomap = fmap
+
+instance UnboxedVector.Unbox a => MonoFunctor (UnboxedVector.Vector a) where
+    type ElementOf (UnboxedVector.Vector a) = a
+
+    monomap :: (a -> a) -> UnboxedVector.Vector a -> UnboxedVector.Vector a
+    monomap = UnboxedVector.map
+
+instance StorableVector.Storable a => MonoFunctor (StorableVector.Vector a) where
+    type ElementOf (StorableVector.Vector a) = a
+
+    monomap :: (a -> a) -> StorableVector.Vector a -> StorableVector.Vector a
+    monomap = StorableVector.map

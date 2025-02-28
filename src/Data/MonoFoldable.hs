@@ -18,12 +18,16 @@ import Data.Maybe (isNothing)
 import Data.Word (Word8)
 
 -- Libraries.
-import qualified Data.ByteString as Bytes (ByteString, unpack, null, length)
-import qualified Data.ByteString.Lazy as LazyBytes (ByteString, unpack, null, length)
-import qualified Data.Text as Text (Text, unpack, null, length)
-import qualified Data.Text.Lazy as LazyText (Text, unpack, null, length)
+import qualified Data.ByteString as Bytes (ByteString, unpack, null, length, foldr, foldl')
+import qualified Data.ByteString.Lazy as LazyBytes (ByteString, unpack, null, length, foldr, foldl')
+import qualified Data.ByteString.Short as ShortBytes (ShortByteString, unpack, null, length, foldr, foldl')
+import qualified Data.Text as Text (Text, unpack, null, length, foldr, foldl')
+import qualified Data.Text.Lazy as LazyText (Text, unpack, null, length, foldr, foldl')
 import Data.Sequence (Seq)
 import Data.Vector (Vector)
+import qualified Data.Vector.Strict as StrictVector (Vector)
+import qualified Data.Vector.Unboxed as UnboxedVector (Vector, Unbox, toList, null, length, foldMap', foldl', foldr)
+import qualified Data.Vector.Storable as StorableVector (Vector, Storable, toList, null, length, foldMap', foldl', foldr)
 
 -- Package.
 import Data.MonoFunctor (MonoFunctor (..))
@@ -68,6 +72,14 @@ instance MonoFoldable Bytes.ByteString where
     monoToList :: Bytes.ByteString -> [Word8]
     monoToList = Bytes.unpack
 
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Word8 -> a -> a) -> a -> Bytes.ByteString -> a
+    monoFoldr = Bytes.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Word8 -> a) -> a -> Bytes.ByteString -> a
+    monoFoldl = Bytes.foldl'
+
     {-# INLINE monoNull #-}
     monoNull :: Bytes.ByteString -> Bool
     monoNull = Bytes.null
@@ -81,6 +93,14 @@ instance MonoFoldable LazyBytes.ByteString where
     monoToList :: LazyBytes.ByteString -> [Word8]
     monoToList = LazyBytes.unpack
 
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Word8 -> a -> a) -> a -> LazyBytes.ByteString -> a
+    monoFoldr = LazyBytes.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Word8 -> a) -> a -> LazyBytes.ByteString -> a
+    monoFoldl = LazyBytes.foldl'
+
     {-# INLINE monoNull #-}
     monoNull :: LazyBytes.ByteString -> Bool
     monoNull = LazyBytes.null
@@ -89,10 +109,39 @@ instance MonoFoldable LazyBytes.ByteString where
     monoLength :: LazyBytes.ByteString -> Word
     monoLength = fromIntegral . LazyBytes.length
 
+instance MonoFoldable ShortBytes.ShortByteString where
+    {-# INLINE monoToList #-}
+    monoToList :: ShortBytes.ShortByteString -> [Word8]
+    monoToList = ShortBytes.unpack
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Word8 -> a -> a) -> a -> ShortBytes.ShortByteString -> a
+    monoFoldr = ShortBytes.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Word8 -> a) -> a -> ShortBytes.ShortByteString -> a
+    monoFoldl = ShortBytes.foldl'
+
+    {-# INLINE monoNull #-}
+    monoNull :: ShortBytes.ShortByteString -> Bool
+    monoNull = ShortBytes.null
+
+    {-# INLINE monoLength #-}
+    monoLength :: ShortBytes.ShortByteString -> Word
+    monoLength = fromIntegral . ShortBytes.length
+
 instance MonoFoldable Text.Text where
     {-# INLINE monoToList #-}
     monoToList :: Text.Text -> [Char]
     monoToList = Text.unpack
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Char -> a -> a) -> a -> Text.Text -> a
+    monoFoldr = Text.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Char -> a) -> a -> Text.Text -> a
+    monoFoldl = Text.foldl'
 
     {-# INLINE monoNull #-}
     monoNull :: Text.Text -> Bool
@@ -106,6 +155,14 @@ instance MonoFoldable LazyText.Text where
     {-# INLINE monoToList #-}
     monoToList :: LazyText.Text -> [Char]
     monoToList = LazyText.unpack
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Char -> a -> a) -> a -> LazyText.Text -> a
+    monoFoldr = LazyText.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Char -> a) -> a -> LazyText.Text -> a
+    monoFoldl = LazyText.foldl'
 
     {-# INLINE monoNull #-}
     monoNull :: LazyText.Text -> Bool
@@ -174,6 +231,14 @@ instance MonoFoldable (Maybe a) where
     monoFoldMap :: Monoid m => (a -> m) -> Maybe a -> m
     monoFoldMap = maybe mempty
 
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> Maybe a -> b
+    monoFoldr = foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> Maybe a -> b
+    monoFoldl = foldl'
+
     {-# INLINE monoNull #-}
     monoNull :: Maybe a -> Bool
     monoNull = isNothing
@@ -190,6 +255,14 @@ instance MonoFoldable (Either e a) where
     {-# INLINE monoFoldMap #-}
     monoFoldMap :: Monoid m => (a -> m) -> Either e a -> m
     monoFoldMap = either (const mempty)
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> Either e a -> b
+    monoFoldr = foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> Either e a -> b
+    monoFoldl = foldl'
 
     {-# INLINE monoNull #-}
     monoNull :: Either e a -> Bool
@@ -248,3 +321,78 @@ instance MonoFoldable (Vector a) where
     {-# INLINE monoLength #-}
     monoLength :: Vector a -> Word
     monoLength = fromIntegral . length
+
+instance MonoFoldable (StrictVector.Vector a) where
+    {-# INLINE monoToList #-}
+    monoToList :: StrictVector.Vector a -> [a]
+    monoToList = toList
+
+    {-# INLINE monoFoldMap #-}
+    monoFoldMap :: Monoid m => (a -> m) -> StrictVector.Vector a -> m
+    monoFoldMap f = foldl' (<>) mempty . fmap f
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> StrictVector.Vector a -> b
+    monoFoldr = foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> StrictVector.Vector a -> b
+    monoFoldl = foldl'
+
+    {-# INLINE monoNull #-}
+    monoNull :: StrictVector.Vector a -> Bool
+    monoNull = null
+
+    {-# INLINE monoLength #-}
+    monoLength :: StrictVector.Vector a -> Word
+    monoLength = fromIntegral . length
+
+instance UnboxedVector.Unbox a => MonoFoldable (UnboxedVector.Vector a) where
+    {-# INLINE monoToList #-}
+    monoToList :: UnboxedVector.Vector a -> [a]
+    monoToList = UnboxedVector.toList
+
+    {-# INLINE monoFoldMap #-}
+    monoFoldMap :: Monoid m => (a -> m) -> UnboxedVector.Vector a -> m
+    monoFoldMap = UnboxedVector.foldMap'
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> UnboxedVector.Vector a -> b
+    monoFoldr = UnboxedVector.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> UnboxedVector.Vector a -> b
+    monoFoldl = UnboxedVector.foldl'
+
+    {-# INLINE monoNull #-}
+    monoNull :: UnboxedVector.Vector a -> Bool
+    monoNull = UnboxedVector.null
+
+    {-# INLINE monoLength #-}
+    monoLength :: UnboxedVector.Vector a -> Word
+    monoLength = fromIntegral . UnboxedVector.length
+
+instance StorableVector.Storable a => MonoFoldable (StorableVector.Vector a) where
+    {-# INLINE monoToList #-}
+    monoToList :: StorableVector.Vector a -> [a]
+    monoToList = StorableVector.toList
+
+    {-# INLINE monoFoldMap #-}
+    monoFoldMap :: Monoid m => (a -> m) -> StorableVector.Vector a -> m
+    monoFoldMap = StorableVector.foldMap'
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> StorableVector.Vector a -> b
+    monoFoldr = StorableVector.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> StorableVector.Vector a -> b
+    monoFoldl = StorableVector.foldl'
+
+    {-# INLINE monoNull #-}
+    monoNull :: StorableVector.Vector a -> Bool
+    monoNull = StorableVector.null
+
+    {-# INLINE monoLength #-}
+    monoLength :: StorableVector.Vector a -> Word
+    monoLength = fromIntegral . StorableVector.length
