@@ -18,10 +18,11 @@ import Data.Maybe (isNothing)
 import Data.Word (Word8)
 
 -- Libraries.
-import qualified Data.ByteString as Bytes (ByteString, unpack, null, length)
-import qualified Data.ByteString.Lazy as LazyBytes (ByteString, unpack, null, length)
-import qualified Data.Text as Text (Text, unpack, null, length)
-import qualified Data.Text.Lazy as LazyText (Text, unpack, null, length)
+import qualified Data.ByteString as Bytes (ByteString, unpack, null, length, foldr, foldl')
+import qualified Data.ByteString.Lazy as LazyBytes (ByteString, unpack, null, length, foldr, foldl')
+import qualified Data.ByteString.Short as ShortBytes (ShortByteString, unpack, null, length, foldr, foldl')
+import qualified Data.Text as Text (Text, unpack, null, length, foldr, foldl')
+import qualified Data.Text.Lazy as LazyText (Text, unpack, null, length, foldr, foldl')
 import Data.Sequence (Seq)
 import Data.Vector (Vector)
 import qualified Data.Vector.Strict as StrictVector (Vector)
@@ -70,6 +71,14 @@ instance MonoFoldable Bytes.ByteString where
     monoToList :: Bytes.ByteString -> [Word8]
     monoToList = Bytes.unpack
 
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Word8 -> a -> a) -> a -> Bytes.ByteString -> a
+    monoFoldr = Bytes.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Word8 -> a) -> a -> Bytes.ByteString -> a
+    monoFoldl = Bytes.foldl'
+
     {-# INLINE monoNull #-}
     monoNull :: Bytes.ByteString -> Bool
     monoNull = Bytes.null
@@ -83,6 +92,14 @@ instance MonoFoldable LazyBytes.ByteString where
     monoToList :: LazyBytes.ByteString -> [Word8]
     monoToList = LazyBytes.unpack
 
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Word8 -> a -> a) -> a -> LazyBytes.ByteString -> a
+    monoFoldr = LazyBytes.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Word8 -> a) -> a -> LazyBytes.ByteString -> a
+    monoFoldl = LazyBytes.foldl'
+
     {-# INLINE monoNull #-}
     monoNull :: LazyBytes.ByteString -> Bool
     monoNull = LazyBytes.null
@@ -91,10 +108,39 @@ instance MonoFoldable LazyBytes.ByteString where
     monoLength :: LazyBytes.ByteString -> Word
     monoLength = fromIntegral . LazyBytes.length
 
+instance MonoFoldable ShortBytes.ShortByteString where
+    {-# INLINE monoToList #-}
+    monoToList :: ShortBytes.ShortByteString -> [Word8]
+    monoToList = ShortBytes.unpack
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Word8 -> a -> a) -> a -> ShortBytes.ShortByteString -> a
+    monoFoldr = ShortBytes.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Word8 -> a) -> a -> ShortBytes.ShortByteString -> a
+    monoFoldl = ShortBytes.foldl'
+
+    {-# INLINE monoNull #-}
+    monoNull :: ShortBytes.ShortByteString -> Bool
+    monoNull = ShortBytes.null
+
+    {-# INLINE monoLength #-}
+    monoLength :: ShortBytes.ShortByteString -> Word
+    monoLength = fromIntegral . ShortBytes.length
+
 instance MonoFoldable Text.Text where
     {-# INLINE monoToList #-}
     monoToList :: Text.Text -> [Char]
     monoToList = Text.unpack
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Char -> a -> a) -> a -> Text.Text -> a
+    monoFoldr = Text.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Char -> a) -> a -> Text.Text -> a
+    monoFoldl = Text.foldl'
 
     {-# INLINE monoNull #-}
     monoNull :: Text.Text -> Bool
@@ -108,6 +154,14 @@ instance MonoFoldable LazyText.Text where
     {-# INLINE monoToList #-}
     monoToList :: LazyText.Text -> [Char]
     monoToList = LazyText.unpack
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (Char -> a -> a) -> a -> LazyText.Text -> a
+    monoFoldr = LazyText.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (a -> Char -> a) -> a -> LazyText.Text -> a
+    monoFoldl = LazyText.foldl'
 
     {-# INLINE monoNull #-}
     monoNull :: LazyText.Text -> Bool

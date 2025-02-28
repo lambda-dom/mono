@@ -18,6 +18,7 @@ import Data.Word (Word8)
 -- Libraries.
 import qualified Data.ByteString as Bytes (ByteString, map)
 import qualified Data.ByteString.Lazy as LazyBytes (ByteString, map)
+import qualified Data.ByteString.Short as ShortBytes (ShortByteString, map)
 import qualified Data.Text as Text (Text, map)
 import qualified Data.Text.Lazy as LazyText (Text, map)
 import Data.Sequence (Seq)
@@ -49,6 +50,12 @@ instance MonoFunctor LazyBytes.ByteString where
 
     monomap :: (Word8 -> Word8) -> LazyBytes.ByteString -> LazyBytes.ByteString
     monomap = LazyBytes.map
+
+instance MonoFunctor ShortBytes.ShortByteString where
+    type ElementOf ShortBytes.ShortByteString = Word8
+
+    monomap :: (Word8 -> Word8) -> ShortBytes.ShortByteString -> ShortBytes.ShortByteString
+    monomap = ShortBytes.map
 
 instance MonoFunctor Text.Text where
     type ElementOf Text.Text = Char
