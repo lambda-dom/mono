@@ -27,6 +27,7 @@ import Data.Sequence (Seq)
 import Data.Vector (Vector)
 import qualified Data.Vector.Strict as StrictVector (Vector)
 import qualified Data.Vector.Unboxed as UnboxedVector (Vector, Unbox, toList, null, length, foldMap', foldl', foldr)
+import qualified Data.Vector.Storable as StorableVector (Vector, Storable, toList, null, length, foldMap', foldl', foldr)
 
 -- Package.
 import Data.MonoFunctor (MonoFunctor (..))
@@ -370,3 +371,28 @@ instance UnboxedVector.Unbox a => MonoFoldable (UnboxedVector.Vector a) where
     {-# INLINE monoLength #-}
     monoLength :: UnboxedVector.Vector a -> Word
     monoLength = fromIntegral . UnboxedVector.length
+
+instance StorableVector.Storable a => MonoFoldable (StorableVector.Vector a) where
+    {-# INLINE monoToList #-}
+    monoToList :: StorableVector.Vector a -> [a]
+    monoToList = StorableVector.toList
+
+    {-# INLINE monoFoldMap #-}
+    monoFoldMap :: Monoid m => (a -> m) -> StorableVector.Vector a -> m
+    monoFoldMap = StorableVector.foldMap'
+
+    {-# INLINE monoFoldr #-}
+    monoFoldr :: (a -> b -> b) -> b -> StorableVector.Vector a -> b
+    monoFoldr = StorableVector.foldr
+
+    {-# INLINE monoFoldl #-}
+    monoFoldl :: (b -> a -> b) -> b -> StorableVector.Vector a -> b
+    monoFoldl = StorableVector.foldl'
+
+    {-# INLINE monoNull #-}
+    monoNull :: StorableVector.Vector a -> Bool
+    monoNull = StorableVector.null
+
+    {-# INLINE monoLength #-}
+    monoLength :: StorableVector.Vector a -> Word
+    monoLength = fromIntegral . StorableVector.length

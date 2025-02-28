@@ -25,6 +25,7 @@ import Data.Sequence (Seq)
 import Data.Vector (Vector)
 import qualified Data.Vector.Strict as StrictVector (Vector)
 import qualified Data.Vector.Unboxed as UnboxedVector (Vector, Unbox, map)
+import qualified Data.Vector.Storable as StorableVector (Vector, Storable, map)
 
 
 {- | The typeclass for monofunctors, the monomorphic version of 'Functor'. -}
@@ -117,3 +118,9 @@ instance UnboxedVector.Unbox a => MonoFunctor (UnboxedVector.Vector a) where
 
     monomap :: (a -> a) -> UnboxedVector.Vector a -> UnboxedVector.Vector a
     monomap = UnboxedVector.map
+
+instance StorableVector.Storable a => MonoFunctor (StorableVector.Vector a) where
+    type ElementOf (StorableVector.Vector a) = a
+
+    monomap :: (a -> a) -> StorableVector.Vector a -> StorableVector.Vector a
+    monomap = StorableVector.map
