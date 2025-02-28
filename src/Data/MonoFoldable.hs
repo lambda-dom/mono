@@ -68,7 +68,7 @@ class MonoFunctor f => MonoFoldable f where
     {- | Return True if @elem@ is an element of the monofoldable. -}
     {-# INLINE monoelem #-}
     monoelem :: Eq (ElementOf f) => ElementOf f -> f -> Bool
-    monoelem x xs = x `elem` monotoList xs
+    monoelem x = (x `elem`) . monotoList
 
 
 -- Monofoldable instances.
@@ -231,10 +231,6 @@ instance MonoFoldable (NonEmpty a) where
     monotoList :: NonEmpty a -> [a]
     monotoList = toList
 
-    {-# INLINE monofoldMap #-}
-    monofoldMap :: Monoid m => (a -> m) -> NonEmpty a -> m
-    monofoldMap f = foldl' (<>) mempty . fmap f
-
     {-# INLINE monofoldr #-}
     monofoldr :: (a -> b -> b) -> b -> NonEmpty a -> b
     monofoldr = foldr
@@ -318,10 +314,6 @@ instance MonoFoldable (Seq a) where
     monotoList :: Seq a -> [a]
     monotoList = toList
 
-    {-# INLINE monofoldMap #-}
-    monofoldMap :: Monoid m => (a -> m) -> Seq a -> m
-    monofoldMap f = foldl' (<>) mempty . fmap f
-
     {-# INLINE monofoldr #-}
     monofoldr :: (a -> b -> b) -> b -> Seq a -> b
     monofoldr = foldr
@@ -347,10 +339,6 @@ instance MonoFoldable (Vector a) where
     monotoList :: Vector a -> [a]
     monotoList = toList
 
-    {-# INLINE monofoldMap #-}
-    monofoldMap :: Monoid m => (a -> m) -> Vector a -> m
-    monofoldMap f = foldl' (<>) mempty . fmap f
-
     {-# INLINE monofoldr #-}
     monofoldr :: (a -> b -> b) -> b -> Vector a -> b
     monofoldr = foldr
@@ -375,10 +363,6 @@ instance MonoFoldable (StrictVector.Vector a) where
     {-# INLINE monotoList #-}
     monotoList :: StrictVector.Vector a -> [a]
     monotoList = toList
-
-    {-# INLINE monofoldMap #-}
-    monofoldMap :: Monoid m => (a -> m) -> StrictVector.Vector a -> m
-    monofoldMap f = foldl' (<>) mempty . fmap f
 
     {-# INLINE monofoldr #-}
     monofoldr :: (a -> b -> b) -> b -> StrictVector.Vector a -> b
