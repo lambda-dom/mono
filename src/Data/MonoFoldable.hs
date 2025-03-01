@@ -33,7 +33,13 @@ import qualified Data.Vector.Storable as StorableVector (Vector, Storable, toLis
 import Data.MonoFunctor (MonoFunctor (..))
 
 
-{- | The typeclass for monofunctors that can be folded over, the monomorphic version of 'Foldable'. -}
+{- | The typeclass for monofunctors that can be folded over, the monomorphic version of 'Foldable'.
+
+All methods have a default implementation in terms of 'monotoList', so we concentrate on the
+properties of the latter.
+
+__Mononaturality__: `monotoList :: f -> [ElementOf f]` is mononatural.
+-}
 class MonoFunctor f => MonoFoldable f where
     {-# MINIMAL monotoList #-}
 
