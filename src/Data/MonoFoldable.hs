@@ -35,19 +35,20 @@ import Data.MonoFunctor (MonoFunctor (..))
 
 {- | The typeclass for monofunctors that can be folded over, the monomorphic version of 'Foldable'.
 
-All methods have a default implementation in terms of 'monotoList', so we concentrate on the
-properties of the latter. To describe the laws for the 'Streamable' typeclass, we start with a
-definition.
+All methods have a default implementation in terms of 'monotoList' and it is implicitly assumed
+that any overriding definitions are extensionally equal to the default ones. Given this assumption,
+we concentrate on the properties of `monotoList`. To describe the laws for the 'MonoFoldable'
+typeclass, we start with a definition.
 
 __Definition__: Let @s@ and @t@ be two monofunctors with @a ~ 'Element' s ~ 'Element' t@. A
 function @h :: s -> t@ is /mononatural/ (or /equivariant/) if for every @f :: a -> a@ we have the
 equality
 
 @
-    omap f . h = h . omap f
+    monomap f . h = h . monomap f
 @
 
-Since @s@ is not polymorphic we do not have free theorems to rely on, so naturality must be
+Since @s@ is not polymorphic we do not have free theorems to rely on, so mononaturality must be
 explicitly required:
 
 __Mononaturality__: `monotoList :: f -> [ElementOf f]` is mononatural.
