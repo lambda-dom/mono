@@ -4,7 +4,7 @@
 >
 > -- Mono, from "Hymn of the Immortal Wind"
 
-This package offers an alternative [mono-traversable](https://hackage.haskell.org/package/mono-traversable). To understand the rational consider the following code:
+This package offers an alternative [mono-traversable](https://hackage.haskell.org/package/mono-traversable). To understand the rationale consider the following code:
 
 ```haskell
 {- | The typeclass for monofunctors, the monomorphic version of 'Functor'. -}
