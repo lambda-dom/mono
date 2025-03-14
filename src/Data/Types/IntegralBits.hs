@@ -30,7 +30,6 @@ newtype IntegralBits n = IntegralBits n
 instance FiniteBits n => MonoFunctor (IntegralBits n) where
     type ElementOf (IntegralBits n) = Bool
 
-    {-# INLINE monomap #-}
     monomap :: (Bool -> Bool) -> IntegralBits n -> IntegralBits n
     monomap f n =
         foldl'
@@ -39,18 +38,14 @@ instance FiniteBits n => MonoFunctor (IntegralBits n) where
             [if f (testBit n i) then bit i else zeroBits | i <- [0 .. finiteBitSize n]]
 
 instance (Eq n, FiniteBits n) => MonoFoldable (IntegralBits n) where
-    {-# INLINE monotoList #-}
     monotoList :: IntegralBits n -> [Bool]
     monotoList n = [testBit n i | i <- [0 .. finiteBitSize n]]
 
-    {-# INLINE mononull #-}
     mononull :: IntegralBits n -> Bool
     mononull = const False
 
-    {-# INLINE monolength #-}
     monolength :: IntegralBits n -> Word
     monolength = fromIntegral . finiteBitSize
 
-    {-# INLINE monoelem #-}
     monoelem :: Bool -> IntegralBits n -> Bool
     monoelem b n = if b then n /= zeroBits else n /= complement zeroBits
