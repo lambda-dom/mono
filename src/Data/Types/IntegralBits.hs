@@ -8,6 +8,12 @@ module Data.Types.IntegralBits (
     -- * Types.
     IntegralBits,
 
+    -- ** Constructor.
+    makeIntegral,
+
+    -- ** Eliminator.
+    toIntegral,
+
     -- * Basic functions.
     bitCount,
     isEnabled,
@@ -53,6 +59,18 @@ instance (Eq n, Integral n, FiniteBits n) => MonoFoldable (IntegralBits n) where
 
     monoelem :: Bool -> IntegralBits n -> Bool
     monoelem b n = if b then n /= zeroBits else n /= complement zeroBits
+
+
+{- | Construct an 'IntegralBits' value. -}
+makeIntegral :: n -> IntegralBits n
+makeIntegral = IntegralBits
+
+{- | Elimination function for 'IntegralBits'.
+
+The inverse to 'makeIntegral'.
+-}
+toIntegral :: IntegralBits n -> n
+toIntegral (IntegralBits n) = n
 
 
 {- | Return the number of bits in the integral type.
