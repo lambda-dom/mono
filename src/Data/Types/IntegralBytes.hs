@@ -6,9 +6,15 @@ The @IntegralBytes@ newtype-wrapper type.
 
 module Data.Types.IntegralBytes (
     -- * Types.
-    IntegralBytes (..),
+    IntegralBytes,
 
-    -- * Basic functions.
+    -- ** Constructor.
+    makeIntegral,
+
+    -- ** Eliminator.
+    toIntegral,
+
+    -- * Functions on @(Integral w, FiniteBits w)@.
     byteCount,
     byte,
     bytes,
@@ -53,6 +59,18 @@ instance (Eq n, Integral n, FiniteBits n) => MonoFoldable (IntegralBytes n) wher
 
     monoelem :: Word8 -> IntegralBytes n -> Bool
     monoelem m n = m `elem` monotoList n
+
+
+{- | Construct an 'IntegralBytes' value. -}
+makeIntegral :: n -> IntegralBytes n
+makeIntegral = IntegralBytes
+
+{- | Elimination function for 'IntegralBytes'.
+
+The inverse to 'makeIntegral'.
+-}
+toIntegral :: IntegralBytes n -> n
+toIntegral (IntegralBytes n) = n
 
 
 {- | Return the number of bytes in the integral type.
