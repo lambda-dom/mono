@@ -96,14 +96,16 @@ bit i b = if b then Bits.bit (fromIntegral i) else zeroBits
 
 {- | Return the list of bits in the integral type from lowest to highest significance. -}
 bits :: FiniteBits w => w -> [Bool]
-bits n = [isEnabled i n | i <- [0 .. bitCount n]]
+bits n = [isEnabled i n | i <- [0 .. pred $ bitCount n]]
 
 {- | Pack a list of bits into an integral value, the inverse of 'bits'.
 
-Result is undefined if the length of the list is larger than the 'bitCount' of the type.
+note(s)
+
+  * Argument list is truncated to a list of 'bitCount' length.
 -}
-pack :: forall w . (Integral w, Bits w) => [Bool] -> w
-pack = foldl' (.|.) 0 . fmap move . zip [0 ..] . fmap convert
+pack :: forall w . (Integral w, FiniteBits w) => [Bool] -> w
+pack = foldl' (.|.) 0 . fmap move . zip [0 .. pred $ bitCount @w 0] . fmap convert
     where
         convert :: Bool -> w
         convert False = 0
