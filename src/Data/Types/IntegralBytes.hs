@@ -70,13 +70,13 @@ Result is undefined if @i@ is larger than the 'byteCount' of the type.
 byte :: (Integral w, Bits w) => Word -> w -> Word8
 byte i n = fromIntegral $ shiftL (shiftR 0xff j .&. n) j
     where
-        j = fromIntegral i
+        j = 8 * fromIntegral i
 
 {- | Return the list of bytes in the integral type from lowest to highest significance. -}
 bytes :: (Integral w, FiniteBits w) => w -> [Word8]
 bytes n = [byte i n | i <- [0 .. byteCount n]]
 
-{- | Pack a list of bytes into an integral value.
+{- | Pack a list of bytes into an integral value, the inverse of 'bytes'.
 
 Result is undefined if the length of the list is larger than the 'byteCount' of the type.
 -}
