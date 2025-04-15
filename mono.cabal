@@ -54,3 +54,4 @@ library
         Data.MonoTraversable
         Data.Types.MonoCompose
         Data.Types.IntegralBits
+        Data.Types.IntegralBytes

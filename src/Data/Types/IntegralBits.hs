@@ -7,6 +7,9 @@ The @IntegralBits@ newtype-wrapper type.
 module Data.Types.IntegralBits (
     -- * Types.
     IntegralBits,
+
+    -- * Basic functions.
+    bitCount,
 ) where
 
 -- Imports.
@@ -45,7 +48,16 @@ instance (Eq n, FiniteBits n) => MonoFoldable (IntegralBits n) where
     mononull = const False
 
     monolength :: IntegralBits n -> Word
-    monolength = fromIntegral . finiteBitSize
+    monolength = bitCount
 
     monoelem :: Bool -> IntegralBits n -> Bool
     monoelem b n = if b then n /= zeroBits else n /= complement zeroBits
+
+
+{- | Return the number of bits in the integral type.
+
+The actual argument is ignored by the function and only the type matters.
+-}
+{-# INLINE bitCount #-}
+bitCount :: FiniteBits w => w -> Word
+bitCount n = fromIntegral $ finiteBitSize n
