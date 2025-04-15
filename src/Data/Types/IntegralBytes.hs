@@ -97,7 +97,9 @@ bytes n = [byte i n | i <- [0 .. byteCount n]]
 
 {- | Pack a list of bytes into an integral value, the inverse of 'bytes'.
 
-Argument list is truncated to a list of 'byteCount' length.
+note(s):
+
+  * Argument list is truncated to a list of 'byteCount' length.
 -}
 pack :: forall w . (Integral w, FiniteBits w) => [Word8] -> w
 pack = foldl' (.|.) 0 . fmap move . zip [0 .. count] . fmap fromIntegral
@@ -110,7 +112,11 @@ pack = foldl' (.|.) 0 . fmap move . zip [0 .. count] . fmap fromIntegral
 
 {- | Pack a list of bytes into an integral value in reverse order.
 
-Argument list is truncated to a list of 'byteCount' length.
+Equivalent to, but more efficient than, @'pack' . reverse@.
+
+note(s)
+
+  * Argument list is truncated to a list of 'byteCount' length.
 -}
 packReverse :: forall w . (Integral w, FiniteBits w) => [Word8] -> w
 packReverse = foldl' (.|.) 0 . fmap move . zip [count - 1, count - 2 .. 0] . fmap fromIntegral
