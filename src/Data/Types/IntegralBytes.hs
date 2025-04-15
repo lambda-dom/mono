@@ -67,7 +67,7 @@ bytes n = [byte i n | i <- [0 .. byteCount n]]
 Result is undefined if the length of the list is larger than the 'byteCount' of the type.
 -}
 pack :: forall w . (Integral w, Bits w) => [Word8] -> w
-pack = foldl' (.&.) 0 . fmap move . zip [0 ..] . fmap fromIntegral
+pack = foldl' (.|.) 0 . fmap move . zip [0 ..] . fmap fromIntegral
     where
         move :: (Word, w) -> w
         move (m, n) = shiftR n (fromIntegral m)
