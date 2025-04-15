@@ -10,14 +10,16 @@ module Data.Types.IntegralBits (
 
     -- * Basic functions.
     bitCount,
-    fromBit,
+    isEnabled,
+    bit,
     bits,
     pack,
 ) where
 
 -- Imports.
 -- Base.
-import Data.Bits (FiniteBits (..), Bits (..))
+import Data.Bits (FiniteBits (finiteBitSize), Bits (zeroBits, complement, testBit, (.|.), shiftR))
+import qualified Data.Bits as Bits (bit)
 import Data.Foldable (Foldable (foldl'))
 import Data.Ix (Ix)
 
@@ -69,15 +71,16 @@ Result is undefined if @i@ is larger than the 'bitCount' of the type.
 isEnabled :: Bits w => Word -> w -> Bool
 isEnabled i = flip testBit (fromIntegral i)
 
+{- | Make an integral value with ith bit @b@. -}
+{-# INLINE bit #-}
+bit :: FiniteBits w => Word -> Bool -> w 
+bit i b = if b then Bits.bit (fromIntegral i) else zeroBits
+
 {- | Return the list of bits in the integral type from lowest to highest significance. -}
 bits :: FiniteBits w => w -> [Bool]
 bits n = [isEnabled i n | i <- [0 .. bitCount n]]
 
-{- | Make an integral value with ith bit @b@. -}
-fromBit :: FiniteBits w => Word -> Bool -> w 
-fromBit i b = if b then bit (fromIntegral i) else zeroBits
-
-{- | Pack a list of bytes into an integral value.
+{- | Pack a list of bits into an integral value, the inverse of 'bits'.
 
 Result is undefined if the length of the list is larger than the 'bitCount' of the type.
 -}
