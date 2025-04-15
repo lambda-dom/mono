@@ -1,10 +1,10 @@
 {- |
-Module: Data.Types.MonoCompose
+Module: Data.MonoFunctor.MonoCompose
 
 The @MonoCompose@ newtype-wrapper type.
 -}
 
-module Data.Types.MonoCompose (
+module Data.MonoFunctor.MonoCompose (
     -- * Types.
     MonoCompose (..),
 ) where

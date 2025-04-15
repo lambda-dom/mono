@@ -1,10 +1,10 @@
 {- |
-Module: Data.Types.IntegralBits
+Module: Data.MonoFunctor.IntegralBits
 
 The @IntegralBits@ newtype-wrapper type.
 -}
 
-module Data.Types.IntegralBits (
+module Data.MonoFunctor.IntegralBits (
     -- * Types.
     IntegralBits,
 

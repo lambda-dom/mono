@@ -52,6 +52,6 @@ library
         Data.MonoFunctor
         Data.MonoFoldable
         Data.MonoTraversable
-        Data.Types.MonoCompose
-        Data.Types.IntegralBits
-        Data.Types.IntegralBytes
+        Data.MonoFunctor.MonoCompose
+        Data.MonoFunctor.IntegralBits
+        Data.MonoFunctor.IntegralBytes
