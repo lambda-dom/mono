@@ -24,7 +24,7 @@ module Data.Types.IntegralBits (
 
 -- Imports.
 -- Base.
-import Data.Bits (FiniteBits (finiteBitSize), Bits (zeroBits, complement, testBit, (.|.), shiftR))
+import Data.Bits (FiniteBits (finiteBitSize), Bits (zeroBits, complement, testBit, (.|.), shiftL))
 import qualified Data.Bits as Bits (bit)
 import Data.Foldable (Foldable (foldl'))
 import Data.Ix (Ix)
@@ -110,4 +110,4 @@ pack = foldl' (.|.) 0 . fmap move . zip [0 ..] . fmap convert
         convert True  = 1
 
         move :: (Word, w) -> w
-        move (n, m) = shiftR m (fromIntegral n)
+        move (n, m) = shiftL m (fromIntegral n)
