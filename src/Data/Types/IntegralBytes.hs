@@ -24,7 +24,8 @@ import Data.Word (Word8)
 
 -- Package.
 import Data.Types.IntegralBits (bitCount)
--- import Data.MonoFunctor (MonoFunctor (..))
+import Data.MonoFunctor (MonoFunctor (..))
+import Data.MonoFoldable (MonoFoldable (..))
 
 
 {- | Constructing integral values byte by byte. -}
@@ -34,11 +35,24 @@ newtype IntegralBytes n = IntegralBytes n
 
 
 -- Instances.
--- instance FiniteBits n => MonoFunctor (IntegralBytes n) where
---     type ElementOf (IntegralBytes n) = Word8
+instance (Integral n, FiniteBits n) => MonoFunctor (IntegralBytes n) where
+    type ElementOf (IntegralBytes n) = Word8
 
---     monomap :: (Word8 -> Word8) -> IntegralBytes n -> IntegralBytes n
---     monomap = undefined
+    monomap :: (Word8 -> Word8) -> IntegralBytes n -> IntegralBytes n
+    monomap f = pack . fmap f . bytes
+
+instance (Eq n, Integral n, FiniteBits n) => MonoFoldable (IntegralBytes n) where
+    monotoList :: IntegralBytes n -> [Word8]
+    monotoList = bytes
+
+    mononull :: IntegralBytes n -> Bool
+    mononull = const False
+
+    monolength :: IntegralBytes n -> Word
+    monolength = byteCount
+
+    monoelem :: Word8 -> IntegralBytes n -> Bool
+    monoelem m n = m `elem` monotoList n
 
 
 {- | Return the number of bytes in the integral type.
