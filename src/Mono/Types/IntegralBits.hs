@@ -1,10 +1,10 @@
 {- |
-Module: Data.Types.IntegralBits
+Module: Mono.Types.IntegralBits
 
 The @IntegralBits@ newtype-wrapper type.
 -}
 
-module Data.Types.IntegralBits (
+module Mono.Types.IntegralBits (
     -- * Types.
     IntegralBits,
 
@@ -30,8 +30,8 @@ import Data.Foldable (Foldable (foldl'))
 import Data.Ix (Ix)
 
 -- Package.
-import Data.MonoFunctor (MonoFunctor (..))
-import Data.MonoFoldable (MonoFoldable (..))
+import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
+import Mono.Typeclasses.MonoFoldable (MonoFoldable (..))
 
 
 {- | Constructing integral values bit by bit. -}

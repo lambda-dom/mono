@@ -1,10 +1,10 @@
 {- |
-Module: Data.MonoFoldable
+Module: Mono.Typeclasses.MonoFoldable
 
 The @MonoFoldable@ typeclass.
 -}
 
-module Data.MonoFoldable (
+module Mono.Typeclasses.MonoFoldable (
     -- * Typeclasses.
     MonoFoldable (..),
 ) where
@@ -30,7 +30,7 @@ import qualified Data.Vector.Unboxed as UnboxedVector (Vector, Unbox, toList, nu
 import qualified Data.Vector.Storable as StorableVector (Vector, Storable, toList, null, length, foldMap', foldl', foldr, elem)
 
 -- Package.
-import Data.MonoFunctor (MonoFunctor (..))
+import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
 
 
 {- | The typeclass for monofunctors that can be folded over, the monomorphic version of 'Foldable'.

@@ -1,10 +1,10 @@
 {- |
-Module: Data.MonoTraversable
+Module: Mono.Typeclasses.MonoTraversable
 
 The @MonoTraversable@ typeclass.
 -}
 
-module Data.MonoTraversable (
+module Mono.Typeclasses.MonoTraversable (
     -- * Typeclasses.
     MonoTraversable (..),
 ) where
@@ -27,8 +27,8 @@ import qualified Data.Vector.Unboxed as UnboxedVector (Unbox, Vector, fromList, 
 import qualified Data.Vector.Storable as StorableVector (Storable, Vector, fromList, toList)
 
 -- Package.
-import Data.MonoFunctor (MonoFunctor (..))
-import Data.MonoFoldable (MonoFoldable)
+import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
+import Mono.Typeclasses.MonoFoldable (MonoFoldable)
 
 
 {- | Typeclass for monomorphic containers that can be traversed from beginning to end. -}

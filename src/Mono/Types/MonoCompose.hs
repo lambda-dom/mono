@@ -1,10 +1,10 @@
 {- |
-Module: Data.Types.MonoCompose
+Module: Mono.Types.MonoCompose
 
 The @MonoCompose@ newtype-wrapper type.
 -}
 
-module Data.Types.MonoCompose (
+module Mono.Types.MonoCompose (
     -- * Types.
     MonoCompose (..),
 ) where
@@ -14,8 +14,8 @@ module Data.Types.MonoCompose (
 import Data.Foldable (Foldable (..))
 
 -- Package.
-import Data.MonoFunctor (MonoFunctor (..))
-import Data.MonoFoldable (MonoFoldable (..))
+import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
+import Mono.Typeclasses.MonoFoldable (MonoFoldable (..))
 
 
 {- | Newtype-wrapper around @f a@ for a functor @f@ and a monofunctor @a@. -}

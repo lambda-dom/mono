@@ -1,10 +1,10 @@
 {- |
-Module: Data.MonoFunctor
+Module: Mono.Typeclasses.MonoFunctor
 
 The @MonoFunctor@ typeclass.
 -}
 
-module Data.MonoFunctor (
+module Mono.Typeclasses.MonoFunctor (
     -- * Typeclasses.
     MonoFunctor (..),
 ) where
