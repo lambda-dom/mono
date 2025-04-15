@@ -93,7 +93,7 @@ byte i n = fromIntegral $ shiftR (shiftL 0xff j .&. n) j
 
 {- | Return the list of bytes in the integral type from lowest to highest significance. -}
 bytes :: (Integral w, FiniteBits w) => w -> [Word8]
-bytes n = [byte i n | i <- [0 .. byteCount n]]
+bytes n = [byte i n | i <- [0 .. pred $ byteCount n]]
 
 {- | Pack a list of bytes into an integral value, the inverse of 'bytes'.
 
@@ -102,13 +102,13 @@ note(s):
   * Argument list is truncated to a list of 'byteCount' length.
 -}
 pack :: forall w . (Integral w, FiniteBits w) => [Word8] -> w
-pack = foldl' (.|.) 0 . fmap move . zip [0 .. count] . fmap fromIntegral
+pack = foldl' (.|.) 0 . fmap move . zip [0 .. count - 1] . fmap fromIntegral
     where
         count :: Word
         count = byteCount @w 0
 
         move :: (Word, w) -> w
-        move (m, n) = shiftL n (fromIntegral m)
+        move (m, n) = shiftL n ( 8 * fromIntegral m)
 
 {- | Pack a list of bytes into an integral value in reverse order.
 
@@ -125,4 +125,4 @@ packReverse = foldl' (.|.) 0 . fmap move . zip [count - 1, count - 2 .. 0] . fma
         count = byteCount @w 0
 
         move :: (Word, w) -> w
-        move (m, n) = shiftL n (fromIntegral m)
+        move (m, n) = shiftL n (8 * fromIntegral m)
