@@ -19,6 +19,7 @@ module Data.Types.IntegralBytes (
     byte,
     bytes,
     pack,
+    packReverse,
 ) where
 
 -- Imports.
@@ -86,7 +87,7 @@ byteCount n = bitCount n `quot` 8
 Result is undefined if @i@ is larger than the 'byteCount' of the type.
 -}
 byte :: (Integral w, Bits w) => Word -> w -> Word8
-byte i n = fromIntegral $ shiftL (shiftR 0xff j .&. n) j
+byte i n = fromIntegral $ shiftR (shiftL 0xff j .&. n) j
     where
         j = 8 * fromIntegral i
 
@@ -96,10 +97,26 @@ bytes n = [byte i n | i <- [0 .. byteCount n]]
 
 {- | Pack a list of bytes into an integral value, the inverse of 'bytes'.
 
-Result is undefined if the length of the list is larger than the 'byteCount' of the type.
+Argument list is truncated to a list of 'byteCount' length.
 -}
-pack :: forall w . (Integral w, Bits w) => [Word8] -> w
-pack = foldl' (.|.) 0 . fmap move . zip [0 ..] . fmap fromIntegral
+pack :: forall w . (Integral w, FiniteBits w) => [Word8] -> w
+pack = foldl' (.|.) 0 . fmap move . zip [0 .. count] . fmap fromIntegral
     where
+        count :: Word
+        count = byteCount @w 0
+
         move :: (Word, w) -> w
-        move (m, n) = shiftR n (fromIntegral m)
+        move (m, n) = shiftL n (fromIntegral m)
+
+{- | Pack a list of bytes into an integral value in reverse order.
+
+Argument list is truncated to a list of 'byteCount' length.
+-}
+packReverse :: forall w . (Integral w, FiniteBits w) => [Word8] -> w
+packReverse = foldl' (.|.) 0 . fmap move . zip [count - 1, count - 2 .. 0] . fmap fromIntegral
+    where
+        count :: Word
+        count = byteCount @w 0
+
+        move :: (Word, w) -> w
+        move (m, n) = shiftL n (fromIntegral m)
