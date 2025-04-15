@@ -1,10 +1,10 @@
 {- |
-Module: Data.MonoFunctor.IntegralBytes
+Module: Mono.Types.IntegralBytes
 
 The @IntegralBytes@ newtype-wrapper type.
 -}
 
-module Data.MonoFunctor.IntegralBytes (
+module Mono.Types.IntegralBytes (
     -- * Types.
     IntegralBytes,
 
@@ -30,9 +30,9 @@ import Data.Ix (Ix)
 import Data.Word (Word8)
 
 -- Package.
-import Data.MonoFunctor (MonoFunctor (..))
-import Data.MonoFoldable (MonoFoldable (..))
-import Data.MonoFunctor.IntegralBits (bitCount)
+import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
+import Mono.Typeclasses.MonoFoldable (MonoFoldable (..))
+import Mono.Types.IntegralBits (bitCount)
 
 
 {- | Constructing integral values byte by byte. -}

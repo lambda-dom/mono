@@ -49,9 +49,9 @@ library
         -Wunused-packages
     other-modules:
     exposed-modules:
-        Data.MonoFunctor
-        Data.MonoFoldable
-        Data.MonoTraversable
-        Data.MonoFunctor.MonoCompose
-        Data.MonoFunctor.IntegralBits
-        Data.MonoFunctor.IntegralBytes
+        Mono.Typeclasses.MonoFunctor
+        Mono.Typeclasses.MonoFoldable
+        Mono.Typeclasses.MonoTraversable
+        Mono.Types.MonoCompose
+        Mono.Types.IntegralBits
+        Mono.Types.IntegralBytes
