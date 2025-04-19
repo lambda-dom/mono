@@ -31,7 +31,6 @@ import qualified Data.Vector.Storable as StorableVector (Vector, Storable, toLis
 
 -- Package.
 import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
-import Mono.Typeclasses.MonoPointed (MonoPointed (..))
 
 
 {- | The typeclass for monofunctors that can be folded over, the monomorphic version of 'Foldable'.
@@ -39,13 +38,19 @@ import Mono.Typeclasses.MonoPointed (MonoPointed (..))
 All methods have a default implementation in terms of 'monotoList' and it is implicitly assumed
 that any overriding definitions are extensionally equal to the default ones. Given this assumption:
 
-__Mononaturality__: 'monotoList' :: f -> ['ElementOf' f] is mononatural.
+__Mononaturality__: @'monotoList' :: f -> ['ElementOf' f]@ is mononatural.
 
-Furthermore, 'monotoList' must be an extension of 'monopoint':
+Furthermore, 'monotoList' must be an extension of 'Mono.Typeclasses.MonoPointed.monopoint':
 
-__Purity__: We have @'monotoList' . 'monopoint' == 'monopoint'@.
+__Purity__: For @'Mono.Typeclasses.MonoPointed' f@, we must have:
+
+@
+'Mono.Typeclasses.MonoPointed' f
+    => 'monotoList' . 'Mono.Typeclasses.MonoPointed.monopoint'
+    == 'Mono.Typeclasses.MonoPointed.monopoint'
+@
 -}
-class MonoPointed f => MonoFoldable f where
+class MonoFunctor f => MonoFoldable f where
     {-# MINIMAL monotoList #-}
 
     {- | Convert a monofoldable to a list. -}

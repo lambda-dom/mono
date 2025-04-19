@@ -57,7 +57,7 @@ note(s):
 
   * Strictly speaking, `[a]` does not have this universal property because of the existence of infinite lists. It is an unfortunate quirk (mostly a side effect of lazyness, pun intended) that proper, finite lists and infinite lists are confused in this way.
 
-Conceptually, the `Foldable` typeclass extends this to other types by dropping the uniqueness and the monoid morphism requirements for `foldMap f`. The equation `foldMap f . pure == f` is missing from `Foldable`, so we add it to `MonoFoldable` in the equivalent form `toList . monopoint == monopoint`. The class `MonoPointed` is itself very simple:
+Conceptually, the `Foldable` typeclass extends to other `Applicative` by dropping the uniqueness and the monoid morphism requirements for `foldMap f`. The equation `foldMap f . pure == f` is missing from `Foldable`, so we conditionally add it to `MonoFoldable` in the equivalent form `toList . monopoint == monopoint`. The class `MonoPointed` is itself very simple:
 
 ```haskell
 class MonoFunctor f => MonoPointed f where

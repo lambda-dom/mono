@@ -27,7 +27,6 @@ import Data.Ix (Ix)
 
 -- Package.
 import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
-import Mono.Typeclasses.MonoPointed (MonoPointed (..))
 import Mono.Typeclasses.MonoFoldable (MonoFoldable (..))
 
 
@@ -43,10 +42,6 @@ instance (Integral w, FiniteBits w) => MonoFunctor (BitArray w) where
 
     monomap :: (Bool -> Bool) -> BitArray w -> BitArray w
     monomap f = pack . fmap f . bits
-
-instance (Integral w, FiniteBits w) => MonoPointed (BitArray w) where
-    monopoint :: Bool -> BitArray w
-    monopoint b = if b then Bits.bit 0 else zeroBits
 
 instance (Eq w, Integral w, FiniteBits w) => MonoFoldable (BitArray w) where
     monotoList :: BitArray w -> [Bool]
