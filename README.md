@@ -45,7 +45,7 @@ The `MonoFunctor` typeclass is the monomorphic variant of the base `Functor`. Th
 
 ## A. 2. `MonoFoldable`.
 
-There are three major differences of our version of `MonoFoldable` from the version in [mono-traversable](https://hackage.haskell.org/package/mono-traversable). The first is that all partial methods have been dropped; hopefully, no justification is needed. The second is that our version is much slimmer and it is only concerned with folding; specifically, most methods added to `Foldable` on optimization grounds (`sum`, `max`, etc.) have been dropped. The third difference is that it actually has an extra method, as implied by the `MonoPointed` superclass. To see the justification, recall that `[a]` is the free monoid over `a`, that is, for every `f :: Monoid m => a -> m` there is a _unique monoid morphism_ such that,
+There are three major differences of our version of `MonoFoldable` from the version in [mono-traversable](https://hackage.haskell.org/package/mono-traversable). The first is that all partial methods have been dropped; hopefully, no justification is needed. The second is that our version is much slimmer and it is only concerned with folding; specifically, most methods added to `Foldable` on optimization grounds (`sum`, `max`, etc.) have been dropped. The third difference is not a difference in the actual code, but in thelaws we require. To see the justification, recall that `[a]` is the free monoid over `a`, that is, for every `f :: Monoid m => a -> m` there is a _unique monoid morphism_ such that,
 
 ```haskell
 foldMap f . pure == f
@@ -57,7 +57,7 @@ note(s):
 
   * Strictly speaking, `[a]` does not have this universal property because of the existence of infinite lists. It is an unfortunate quirk (mostly a side effect of lazyness, pun intended) that proper, finite lists and infinite lists are confused in this way.
 
-Conceptually, the `Foldable` typeclass extends to other `Applicative` by dropping the uniqueness and the monoid morphism requirements for `foldMap f`. The equation `foldMap f . pure == f` is missing from `Foldable`, so we conditionally add it to `MonoFoldable` in the equivalent form `toList . monopoint == monopoint`. The class `MonoPointed` is itself very simple:
+Conceptually, the `Foldable` typeclass extends to other pointed functors by dropping the uniqueness and the monoid morphism requirements for `foldMap f`. The equation `foldMap f . pure == f` is missing from `Foldable`, so we conditionally add it to `MonoFoldable` in the equivalent form `toList . monopoint == monopoint`. Note that `MonoPointed` _cannot_ be added as a superclass because there are "fixed length" types like `BitArray` without a `MonoPointed` instance. The class `MonoPointed` is itself very simple:
 
 ```haskell
 class MonoFunctor f => MonoPointed f where
