@@ -17,15 +17,15 @@ import Data.Word (Word8)
 
 -- Libraries.
 import qualified Data.ByteString as Bytes (ByteString, map)
-import qualified Data.ByteString.Lazy as LazyBytes (ByteString, map)
-import qualified Data.ByteString.Short as ShortBytes (ShortByteString, map)
+import qualified Data.ByteString.Lazy as LBytes (ByteString, map)
+import qualified Data.ByteString.Short as SBytes (ShortByteString, map)
 import qualified Data.Text as Text (Text, map)
-import qualified Data.Text.Lazy as LazyText (Text, map)
+import qualified Data.Text.Lazy as LText (Text, map)
 import Data.Sequence (Seq)
 import Data.Vector (Vector)
-import qualified Data.Vector.Strict as StrictVector (Vector)
-import qualified Data.Vector.Unboxed as UnboxedVector (Vector, Unbox, map)
-import qualified Data.Vector.Storable as StorableVector (Vector, Storable, map)
+import qualified Data.Vector.Strict as SVector (Vector)
+import qualified Data.Vector.Unboxed as UVector (Vector, Unbox, map)
+import qualified Data.Vector.Storable as StVector (Vector, Storable, map)
 
 
 {- | The typeclass for monofunctors, the monomorphic version of 'Functor'. -}
@@ -46,17 +46,17 @@ instance MonoFunctor Bytes.ByteString where
     monomap :: (Word8 -> Word8) -> Bytes.ByteString -> Bytes.ByteString
     monomap = Bytes.map
 
-instance MonoFunctor LazyBytes.ByteString where
-    type ElementOf LazyBytes.ByteString = Word8
+instance MonoFunctor LBytes.ByteString where
+    type ElementOf LBytes.ByteString = Word8
 
-    monomap :: (Word8 -> Word8) -> LazyBytes.ByteString -> LazyBytes.ByteString
-    monomap = LazyBytes.map
+    monomap :: (Word8 -> Word8) -> LBytes.ByteString -> LBytes.ByteString
+    monomap = LBytes.map
 
-instance MonoFunctor ShortBytes.ShortByteString where
-    type ElementOf ShortBytes.ShortByteString = Word8
+instance MonoFunctor SBytes.ShortByteString where
+    type ElementOf SBytes.ShortByteString = Word8
 
-    monomap :: (Word8 -> Word8) -> ShortBytes.ShortByteString -> ShortBytes.ShortByteString
-    monomap = ShortBytes.map
+    monomap :: (Word8 -> Word8) -> SBytes.ShortByteString -> SBytes.ShortByteString
+    monomap = SBytes.map
 
 instance MonoFunctor Text.Text where
     type ElementOf Text.Text = Char
@@ -64,11 +64,11 @@ instance MonoFunctor Text.Text where
     monomap :: (Char -> Char) -> Text.Text -> Text.Text
     monomap = Text.map
 
-instance MonoFunctor LazyText.Text where
-    type ElementOf LazyText.Text = Char
+instance MonoFunctor LText.Text where
+    type ElementOf LText.Text = Char
 
-    monomap :: (Char -> Char) -> LazyText.Text -> LazyText.Text
-    monomap = LazyText.map
+    monomap :: (Char -> Char) -> LText.Text -> LText.Text
+    monomap = LText.map
 
 -- Functor instances.
 instance MonoFunctor [a] where
@@ -107,20 +107,20 @@ instance MonoFunctor (Vector a) where
     monomap :: (a -> a) -> Vector a -> Vector a
     monomap = fmap
 
-instance MonoFunctor (StrictVector.Vector a) where
-    type ElementOf (StrictVector.Vector a) = a
+instance MonoFunctor (SVector.Vector a) where
+    type ElementOf (SVector.Vector a) = a
 
-    monomap :: (a -> a) -> StrictVector.Vector a -> StrictVector.Vector a
+    monomap :: (a -> a) -> SVector.Vector a -> SVector.Vector a
     monomap = fmap
 
-instance UnboxedVector.Unbox a => MonoFunctor (UnboxedVector.Vector a) where
-    type ElementOf (UnboxedVector.Vector a) = a
+instance UVector.Unbox a => MonoFunctor (UVector.Vector a) where
+    type ElementOf (UVector.Vector a) = a
 
-    monomap :: (a -> a) -> UnboxedVector.Vector a -> UnboxedVector.Vector a
-    monomap = UnboxedVector.map
+    monomap :: (a -> a) -> UVector.Vector a -> UVector.Vector a
+    monomap = UVector.map
 
-instance StorableVector.Storable a => MonoFunctor (StorableVector.Vector a) where
-    type ElementOf (StorableVector.Vector a) = a
+instance StVector.Storable a => MonoFunctor (StVector.Vector a) where
+    type ElementOf (StVector.Vector a) = a
 
-    monomap :: (a -> a) -> StorableVector.Vector a -> StorableVector.Vector a
-    monomap = StorableVector.map
+    monomap :: (a -> a) -> StVector.Vector a -> StVector.Vector a
+    monomap = StVector.map
