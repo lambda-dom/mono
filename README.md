@@ -57,7 +57,7 @@ note(s):
 
   * Strictly speaking, `[a]` does not have this universal property because of the existence of infinite lists. It is an unfortunate quirk (mostly a side effect of lazyness, pun intended) that proper, finite lists and infinite lists are confused in this way.
 
-Conceptually, the `Foldable` typeclass extends to other pointed functors by dropping the uniqueness and the monoid morphism requirements for `foldMap f`. We add the monomorphic variant of `Applicative f => foldMap f . pure = f` to `MonoFoldable` in the equivalent form `toList . monopoint == monopoint`. Note that `MonoPointed` _cannot_ be added as a superclass because there are "fixed length" types like `BitArray` without a `MonoPointed` instance, just as there are `Foldable` that are not `Applicative` or even pointed. The class `MonoPointed` is itself very simple:
+Conceptually, the `Foldable` typeclass extends to other pointed functors by dropping the uniqueness and the monoid morphism requirements for `foldMap f`. We add the monomorphic variant of `Applicative f => foldMap f . pure = f` to `MonoFoldable` in the equivalent form `monotoList . monopoint == monopoint`. Note that `MonoPointed` _cannot_ be added as a superclass because there are "fixed length" types like `BitArray` without a `MonoPointed` instance, just as there are `Foldable` that are not `Applicative` or even pointed. The class `MonoPointed` is itself very simple:
 
 ```haskell
 class MonoFunctor f => MonoPointed f where
@@ -66,7 +66,7 @@ class MonoFunctor f => MonoPointed f where
 
 _Mononaturality_ (or _equivariance_ in the monoid action reformulation) is the obvious monomorphic variant of naturality.
 
-__Definition__: Let `s` and `t` be two monofunctors with `a ~ 'ElementOf' s ~ 'ElementOf' t`. A
+__Definition__: Let `s` and `t` be two monofunctors with `a ~ ElementOf s ~ ElementOf t`. A
 function `h :: s -> t` is _mononatural_ if for every `f :: a -> a` we have the
 equality:
 
