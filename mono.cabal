@@ -57,8 +57,8 @@ library
         Mono.Typeclasses.MonoFoldable
         Mono.Typeclasses.MonoTraversable
         Mono.Types.MonoCompose
-        Mono.Types.IntegralBits
-        Mono.Types.IntegralBytes
+        Mono.Types.BitArray
+        Mono.Types.ByteArray
 
 test-suite trisagion-tests
     import: common-fields
@@ -72,5 +72,5 @@ test-suite trisagion-tests
     build-tool-depends:
         hspec-discover:hspec-discover
     other-modules:
-        Tests.Types.IntegralBitsSpec
-        Tests.Types.IntegralBytesSpec
+        Tests.Types.BitArraySpec
+        Tests.Types.ByteArraySpec

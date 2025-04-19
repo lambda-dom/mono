@@ -1,4 +1,4 @@
-module Tests.Types.IntegralBytesSpec (
+module Tests.Types.ByteArraySpec (
     -- * Tests.
     spec,
 ) where
@@ -9,7 +9,7 @@ module Tests.Types.IntegralBytesSpec (
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 -- Module to test.
-import Mono.Types.IntegralBytes (byteCount, bytes, pack, packReverse)
+import Mono.Types.ByteArray (byteCount, bytes, pack, packReverse)
 
 -- Base.
 import Data.Word (Word8, Word16, Word32, Word64)
@@ -17,7 +17,7 @@ import Data.Word (Word8, Word16, Word32, Word64)
 
 -- Main module test driver.
 spec :: Spec
-spec = describe "Mono.Types.IntegralBytes tests" $ do
+spec = describe "Mono.Types.ByteArray tests" $ do
     spec_byteCount
     spec_bytes
     spec_pack
@@ -55,6 +55,18 @@ spec_pack = describe "pack tests" $ do
         h [0, 0xff, 0, 0] `shouldBe` 0xff00
         h [0, 0, 0xff,  0] `shouldBe` 0xff0000
         h [0, 0, 0, 0xff] `shouldBe` 0xff000000
+
+    it "Success when argument list is strictly smaller than byteCount" $ do
+        h [0xff] `shouldBe` 0xff
+        h [0, 0xff] `shouldBe` 0xff00
+        h [0, 0, 0xff] `shouldBe` 0xff0000
+
+    it "Success when argumebt list is strictly larger than byteCount" $ do
+        let append = [0xff, 0xff]
+        h ([0xff, 0, 0, 0] ++ append) `shouldBe` 0xff
+        h ([0, 0xff, 0, 0] ++ append) `shouldBe` 0xff00
+        h ([0, 0, 0xff,  0] ++ append) `shouldBe` 0xff0000
+        h ([0, 0, 0, 0xff] ++ append) `shouldBe` 0xff000000
 
 spec_packReverse :: Spec
 spec_packReverse = describe "packReverse tests" $ do
