@@ -73,3 +73,5 @@ equality:
 ```haskell
 monomap f . h == h . monomap f
 ```
+
+Since monofunctors are monomorphic, laws like mononaturality are not available by free theorems and must be explicitly required. In this vein, the first law is simply that `monotoList` is mononatural. All other methods have a default implementation in terms of `monotoList` and it is implicitly assumed that any overriding definitions are extensionally equal to the default ones.
