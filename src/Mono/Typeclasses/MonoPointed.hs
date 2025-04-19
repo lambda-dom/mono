@@ -12,8 +12,14 @@ module Mono.Typeclasses.MonoPointed (
 -- Imports.
 -- Base.
 import Data.List.NonEmpty (NonEmpty)
+import Data.Word (Word8)
 
 -- Libraries.
+import qualified Data.ByteString as Bytes (ByteString, singleton)
+import qualified Data.ByteString.Lazy as LBytes (ByteString, singleton)
+import qualified Data.ByteString.Short as SBytes (ShortByteString, singleton)
+import qualified Data.Text as Text (Text, singleton)
+import qualified Data.Text.Lazy as LText (Text, singleton)
 import Data.Sequence (Seq)
 import Data.Vector (Vector)
 import qualified Data.Vector.Strict as SVector (Vector)
@@ -36,6 +42,27 @@ class MonoFunctor f => MonoPointed f where
 
 
 -- Instances.
+instance MonoPointed Bytes.ByteString where
+    monopoint :: Word8 -> Bytes.ByteString
+    monopoint = Bytes.singleton
+
+instance MonoPointed LBytes.ByteString where
+    monopoint :: Word8 -> LBytes.ByteString
+    monopoint = LBytes.singleton
+
+instance MonoPointed SBytes.ShortByteString where
+    monopoint :: Word8 -> SBytes.ShortByteString
+    monopoint = SBytes.singleton
+
+instance MonoPointed Text.Text where
+    monopoint :: Char -> Text.Text
+    monopoint = Text.singleton
+
+instance MonoPointed LText.Text where
+    monopoint :: Char -> LText.Text
+    monopoint = LText.singleton
+
+
 -- Functor instances.
 instance MonoPointed [a] where
     monopoint :: a -> [a]
