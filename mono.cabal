@@ -59,7 +59,7 @@ library
         Mono.Typeclasses.MonoTraversable
         Mono.Types.MonoCompose
         Mono.Types.BitArray
-        Mono.Types.ByteArray
+        -- Mono.Types.ByteArray
 
 test-suite trisagion-tests
     import: common-fields
