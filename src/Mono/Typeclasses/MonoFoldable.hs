@@ -45,9 +45,7 @@ Furthermore, 'monotoList' must be an extension of 'Mono.Typeclasses.MonoPointed.
 __Purity__: For @'Mono.Typeclasses.MonoPointed' f@, we must have:
 
 @
-'Mono.Typeclasses.MonoPointed' f
-    => 'monotoList' . 'Mono.Typeclasses.MonoPointed.monopoint'
-    == 'Mono.Typeclasses.MonoPointed.monopoint'
+'monotoList' . 'Mono.Typeclasses.MonoPointed.monopoint' == 'Mono.Typeclasses.MonoPointed.monopoint'
 @
 -}
 class MonoFunctor f => MonoFoldable f where
