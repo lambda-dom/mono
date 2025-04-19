@@ -36,22 +36,19 @@ import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
 {- | The typeclass for monofunctors that can be folded over, the monomorphic version of 'Foldable'.
 
 All methods have a default implementation in terms of 'monotoList' and it is implicitly assumed
-that any overriding definitions are extensionally equal to the default ones. Given this assumption,
-we concentrate on the properties of `monotoList`. To describe the laws for the 'MonoFoldable'
-typeclass, we start with a definition.
+that any overriding definitions are extensionally equal to the default ones. Given this assumption:
 
-__Definition__: Let @s@ and @t@ be two monofunctors with @a ~ 'ElementOf' s ~ 'ElementOf' t@. A
-function @h :: s -> t@ is /mononatural/ (or /equivariant/) if for every @f :: a -> a@ we have the
-equality
+__Mononaturality__: @'monotoList' :: f -> ['ElementOf' f]@ is mononatural.
+
+Furthermore, 'monotoList' must be an extension of 'Mono.Typeclasses.MonoPointed.monopoint':
+
+__Purity__: For @'Mono.Typeclasses.MonoPointed' f@, we must have:
 
 @
-    monomap f . h = h . monomap f
+'Mono.Typeclasses.MonoPointed' f
+    => 'monotoList' . 'Mono.Typeclasses.MonoPointed.monopoint'
+    == 'Mono.Typeclasses.MonoPointed.monopoint'
 @
-
-Since @s@ is not polymorphic we do not have free theorems to rely on, so mononaturality must be
-explicitly required:
-
-__Mononaturality__: `monotoList :: f -> [ElementOf f]` is mononatural.
 -}
 class MonoFunctor f => MonoFoldable f where
     {-# MINIMAL monotoList #-}

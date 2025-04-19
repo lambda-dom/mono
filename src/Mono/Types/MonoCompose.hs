@@ -15,6 +15,7 @@ import Data.Foldable (Foldable (..))
 
 -- Package.
 import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
+import Mono.Typeclasses.MonoPointed (MonoPointed (..))
 import Mono.Typeclasses.MonoFoldable (MonoFoldable (..))
 
 
@@ -30,7 +31,11 @@ instance (Functor f, MonoFunctor a) => MonoFunctor (MonoCompose f a) where
     monomap :: (ElementOf a -> ElementOf a) -> MonoCompose f a -> MonoCompose f a
     monomap f (MonoCompose xs) = MonoCompose (fmap (monomap f) xs)
 
-instance (Functor f, Foldable f, MonoFoldable a) => MonoFoldable (MonoCompose f a) where
+instance (Applicative f, MonoPointed a) => MonoPointed (MonoCompose f a) where
+    monopoint :: ElementOf a -> MonoCompose f a
+    monopoint = MonoCompose . pure . monopoint
+
+instance (Applicative f, Foldable f, MonoFoldable a) => MonoFoldable (MonoCompose f a) where
     monotoList :: MonoCompose f a -> [ElementOf a]
     monotoList (MonoCompose xs) = concatMap monotoList $ toList xs
 

@@ -54,6 +54,7 @@ library
     other-modules:
     exposed-modules:
         Mono.Typeclasses.MonoFunctor
+        Mono.Typeclasses.MonoPointed
         Mono.Typeclasses.MonoFoldable
         Mono.Typeclasses.MonoTraversable
         Mono.Types.MonoCompose
