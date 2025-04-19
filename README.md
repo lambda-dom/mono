@@ -61,10 +61,6 @@ Conceptually, the `Foldable` typeclass extends this to other types by dropping t
 
 ```haskell
 class MonoFunctor f => MonoPointed f where
-    {- | Embed an element in the 'MonoFunctor'.
-
-    The method 'monopoint' must be mononatural.
-    -}
     monopoint :: ElementOf f -> f
 ```
 
