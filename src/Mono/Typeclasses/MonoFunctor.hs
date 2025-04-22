@@ -26,7 +26,6 @@ import Data.Vector (Vector)
 import qualified Data.Vector.Strict as SVector (Vector)
 import qualified Data.Vector.Unboxed as UVector (Vector, Unbox, map)
 import qualified Data.Vector.Storable as StVector (Vector, Storable, map)
-import qualified Data.Array.IArray as Array (Array)
 
 
 {- | The typeclass for monofunctors, the monomorphic version of 'Functor'. -}
@@ -125,9 +124,3 @@ instance StVector.Storable a => MonoFunctor (StVector.Vector a) where
 
     monomap :: (a -> a) -> StVector.Vector a -> StVector.Vector a
     monomap = StVector.map
-
-instance MonoFunctor (Array.Array i a) where
-    type ElementOf (Array.Array i a) = a
-
-    monomap :: (a -> a) -> Array.Array i a -> Array.Array i a
-    monomap = fmap
