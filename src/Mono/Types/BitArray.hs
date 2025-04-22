@@ -40,19 +40,24 @@ newtype BitArray w = BitArray w
 instance (Integral w, FiniteBits w) => MonoFunctor (BitArray w) where
     type ElementOf (BitArray w) = Bool
 
+    {-# INLINE monomap #-}
     monomap :: (Bool -> Bool) -> BitArray w -> BitArray w
     monomap f = pack . fmap f . bits
 
 instance (Eq w, Integral w, FiniteBits w) => MonoFoldable (BitArray w) where
+    {-# INLINE monotoList #-}
     monotoList :: BitArray w -> [Bool]
     monotoList = bits
 
+    {-# INLINE mononull #-}
     mononull :: BitArray w -> Bool
     mononull = const False
 
+    {-# INLINE monolength #-}
     monolength :: BitArray w -> Word
     monolength = bitCount
 
+    {-# INLINE monoelem #-}
     monoelem :: Bool -> BitArray w -> Bool
     monoelem b n = if b then n /= zeroBits else n /= complement zeroBits
 
@@ -61,6 +66,7 @@ instance (Eq w, Integral w, FiniteBits w) => MonoFoldable (BitArray w) where
 
 The inverse to the constructor v'BitArray'.
 -}
+{-# INLINE toIntegral #-}
 toIntegral :: BitArray w -> w
 toIntegral (BitArray n) = n
 
