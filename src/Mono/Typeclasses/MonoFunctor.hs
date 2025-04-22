@@ -43,30 +43,35 @@ class MonoFunctor f where
 instance MonoFunctor Bytes.ByteString where
     type ElementOf Bytes.ByteString = Word8
 
+    {-# INLINE monomap #-}
     monomap :: (Word8 -> Word8) -> Bytes.ByteString -> Bytes.ByteString
     monomap = Bytes.map
 
 instance MonoFunctor LBytes.ByteString where
     type ElementOf LBytes.ByteString = Word8
 
+    {-# INLINE monomap #-}
     monomap :: (Word8 -> Word8) -> LBytes.ByteString -> LBytes.ByteString
     monomap = LBytes.map
 
 instance MonoFunctor SBytes.ShortByteString where
     type ElementOf SBytes.ShortByteString = Word8
 
+    {-# INLINE monomap #-}
     monomap :: (Word8 -> Word8) -> SBytes.ShortByteString -> SBytes.ShortByteString
     monomap = SBytes.map
 
 instance MonoFunctor Text.Text where
     type ElementOf Text.Text = Char
 
+    {-# INLINE monomap #-}
     monomap :: (Char -> Char) -> Text.Text -> Text.Text
     monomap = Text.map
 
 instance MonoFunctor LText.Text where
     type ElementOf LText.Text = Char
 
+    {-# INLINE monomap #-}
     monomap :: (Char -> Char) -> LText.Text -> LText.Text
     monomap = LText.map
 
@@ -74,53 +79,62 @@ instance MonoFunctor LText.Text where
 instance MonoFunctor [a] where
     type ElementOf [a] = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> [a] -> [a]
     monomap = fmap
 
 instance MonoFunctor (NonEmpty a) where
     type ElementOf (NonEmpty a) = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> NonEmpty a -> NonEmpty a
     monomap = fmap
 
 instance MonoFunctor (Maybe a) where
     type ElementOf (Maybe a) = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> Maybe a -> Maybe a
     monomap = fmap
 
 instance MonoFunctor (Either e a) where
     type ElementOf (Either e a) = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> Either e a -> Either e a
     monomap = fmap
 
 instance MonoFunctor (Seq a) where
     type ElementOf (Seq a) = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> Seq a -> Seq a
     monomap = fmap
 
 instance MonoFunctor (Vector a) where
     type ElementOf (Vector a) = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> Vector a -> Vector a
     monomap = fmap
 
 instance MonoFunctor (SVector.Vector a) where
     type ElementOf (SVector.Vector a) = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> SVector.Vector a -> SVector.Vector a
     monomap = fmap
 
 instance UVector.Unbox a => MonoFunctor (UVector.Vector a) where
     type ElementOf (UVector.Vector a) = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> UVector.Vector a -> UVector.Vector a
     monomap = UVector.map
 
 instance StVector.Storable a => MonoFunctor (StVector.Vector a) where
     type ElementOf (StVector.Vector a) = a
 
+    {-# INLINE monomap #-}
     monomap :: (a -> a) -> StVector.Vector a -> StVector.Vector a
     monomap = StVector.map
