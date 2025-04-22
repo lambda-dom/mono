@@ -41,57 +41,71 @@ class MonoFoldable f => MonoTraversable f where
 
 -- Instances.
 instance MonoTraversable Bytes.ByteString where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (Word8 -> m Word8) -> Bytes.ByteString -> m Bytes.ByteString
     monotraverse f = fmap Bytes.pack . traverse f . Bytes.unpack
 
 instance MonoTraversable LazyBytes.ByteString where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (Word8 -> m Word8) -> LazyBytes.ByteString -> m LazyBytes.ByteString
     monotraverse f = fmap LazyBytes.pack . traverse f . LazyBytes.unpack
 
 instance MonoTraversable ShortBytes.ShortByteString where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (Word8 -> m Word8) -> ShortBytes.ShortByteString -> m ShortBytes.ShortByteString
     monotraverse f = fmap ShortBytes.pack . traverse f . ShortBytes.unpack
 
 instance MonoTraversable Text.Text where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (Char -> m Char) -> Text.Text -> m Text.Text
     monotraverse f = fmap Text.pack . traverse f . Text.unpack
 
 instance MonoTraversable LazyText.Text where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (Char -> m Char) -> LazyText.Text -> m LazyText.Text
     monotraverse f = fmap LazyText.pack . traverse f . LazyText.unpack
 
 instance MonoTraversable [a] where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> [a] -> m [a]
     monotraverse = traverse
 
 instance MonoTraversable (NonEmpty a) where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> NonEmpty a -> m (NonEmpty a)
     monotraverse = traverse
 
 instance MonoTraversable (Maybe a) where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> Maybe a -> m (Maybe a)
     monotraverse = traverse
 
 instance MonoTraversable (Either e a) where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> Either e a -> m (Either e a)
     monotraverse = traverse
 
 instance MonoTraversable (Seq a) where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> Seq a -> m (Seq a)
     monotraverse = traverse
 
 instance MonoTraversable (Vector a) where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> Vector a -> m (Vector a)
     monotraverse = traverse
 
 instance MonoTraversable (StrictVector.Vector a) where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> StrictVector.Vector a -> m (StrictVector.Vector a)
     monotraverse = traverse
 
 instance UnboxedVector.Unbox a => MonoTraversable (UnboxedVector.Vector a) where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> UnboxedVector.Vector a -> m (UnboxedVector.Vector a)
     monotraverse f = fmap UnboxedVector.fromList . traverse f . UnboxedVector.toList
 
 instance StorableVector.Storable a => MonoTraversable (StorableVector.Vector a) where
+    {-# INLINEABLE monotraverse #-}
     monotraverse :: Applicative m => (a -> m a) -> StorableVector.Vector a -> m (StorableVector.Vector a)
     monotraverse f = fmap StorableVector.fromList . traverse f . StorableVector.toList
