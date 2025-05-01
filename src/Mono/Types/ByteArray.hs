@@ -42,19 +42,24 @@ newtype ByteArray w = ByteArray w
 instance (Integral w, FiniteBits w) => MonoFunctor (ByteArray w) where
     type ElementOf (ByteArray w) = Word8
 
+    {-# INLINE monomap #-}
     monomap :: (Word8 -> Word8) -> ByteArray w -> ByteArray w
     monomap f = pack . fmap f . bytes
 
 instance (Eq w, Integral w, FiniteBits w) => MonoFoldable (ByteArray w) where
+    {-# INLINE monotoList #-}
     monotoList :: ByteArray w -> [Word8]
     monotoList = bytes
 
+    {-# INLINE mononull #-}
     mononull :: ByteArray w -> Bool
     mononull = const False
 
+    {-# INLINE monolength #-}
     monolength :: ByteArray w -> Word
     monolength = byteCount
 
+    {-# INLINE monoelem #-}
     monoelem :: Word8 -> ByteArray w -> Bool
     monoelem m n = m `elem` monotoList n
 
@@ -63,6 +68,7 @@ instance (Eq w, Integral w, FiniteBits w) => MonoFoldable (ByteArray w) where
 
 The inverse to the v'ByteArray' constructor.
 -}
+{-# INLINE toIntegral #-}
 toIntegral :: ByteArray w -> w
 toIntegral (ByteArray n) = n
 
