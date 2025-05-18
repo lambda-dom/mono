@@ -27,6 +27,7 @@ import Data.Ix (Ix)
 import Data.Word (Word8)
 
 -- Package.
+import Mono.Lib.Utils (enumDown)
 import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
 import Mono.Typeclasses.MonoFoldable (MonoFoldable (..))
 import Mono.Types.BitArray (bitCount)
@@ -135,8 +136,5 @@ packReverse :: forall w . (Integral w, FiniteBits w) => [Word8] -> w
 packReverse
         = foldl' (.|.) 0
         . fmap (uncurry shiftByteL)
-        . zip [count - 1, count - 2 .. 0]
+        . enumDown (pred $ byteCount @w 0)
         . fmap fromIntegral
-    where
-        count :: Word
-        count = byteCount @w 0
