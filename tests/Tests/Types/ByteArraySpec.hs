@@ -9,7 +9,7 @@ module Tests.Types.ByteArraySpec (
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 -- Module to test.
-import Mono.Types.ByteArray (byteCount, bytes, pack, packReverse)
+import Mono.Types.ByteArray (byteCount, bytes, pack, packReverse, bytesReverse)
 
 -- Base.
 import Data.Word (Word8, Word16, Word32, Word64)
@@ -20,6 +20,7 @@ spec :: Spec
 spec = describe "Mono.Types.ByteArray tests" $ do
     spec_byteCount
     spec_bytes
+    spec_bytesReverse
     spec_pack
     spec_packReverse
 
@@ -46,6 +47,14 @@ spec_bytes = describe "bytes tests" $ do
         bytes (0xff00 :: Word32) `shouldBe` [0, 0xff, 0, 0]
         bytes (0xff0000 :: Word32) `shouldBe` [0, 0, 0xff,  0]
         bytes (0xff000000 :: Word32) `shouldBe` [0, 0, 0, 0xff]
+
+spec_bytesReverse :: Spec
+spec_bytesReverse = describe "bytes tests" $ do
+    it "Success cases" $ do
+        bytesReverse (0xff :: Word32) `shouldBe` [0, 0, 0, 0xff]
+        bytesReverse (0xff00 :: Word32) `shouldBe` [0, 0, 0xff, 0]
+        bytesReverse (0xff0000 :: Word32) `shouldBe` [0, 0xff, 0,  0]
+        bytesReverse (0xff000000 :: Word32) `shouldBe` [0xff, 0, 0, 0]
 
 spec_pack :: Spec
 spec_pack = describe "pack tests" $ do
