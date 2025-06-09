@@ -15,6 +15,7 @@ module Mono.Types.ByteArray (
     byteCount,
     byte,
     bytes,
+    bytesReverse,
     pack,
     packReverse,
 ) where
@@ -94,15 +95,16 @@ byte i n = fromIntegral $ shiftR (shiftL 0xff j .&. n) j
         j = 8 * fromIntegral i
 
 {- | Return the list of bytes from lowest to highest significance. -}
-{-# INLINEABLE bytes #-}
+{-# INLINE bytes #-}
 bytes :: (Integral w, FiniteBits w) => w -> [Word8]
-bytes w = go 0
+bytes n = fmap (`byte` n) [0 .. pred $ byteCount n]
+
+{- | Return the list of bytes from highest to lowest significance. -}
+{-# INLINE bytesReverse #-}
+bytesReverse :: (Integral w, FiniteBits w) => w -> [Word8]
+bytesReverse n = fmap (`byte` n) (down . pred . byteCount $ n)
     where
-        go :: Word -> [Word8]
-        go !n =
-            if n == byteCount w
-                then []
-                else byte n w : go (succ n)
+        down m = if m == 0 then [0] else [m, pred m .. 0]
 
 {- | Shift an integral @n@ bytes left. -}
 {-# INLINE shiftByteL #-}
