@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               mono
-version:            0.1.0.0
+version:            0.1.0.1
 synopsis:           Monomorphic versions of typeclasses Functor, Foldable and Traversable.
 description:        Please see the README on GitHub at <https://github.com/lambda-dom/mono#readme>
 category:           Data
@@ -28,8 +28,8 @@ common common-fields
         DerivingStrategies
         TypeFamilies
     build-depends:
-        -- GHC 9.6 - 9.8
-        base >=4.18 && <4.20,
+        -- GHC 9.6 - 9.10
+        base >=4.18 && <4.21,
     ghc-options:
         -Wall
         -Wcompat
