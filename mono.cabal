@@ -70,7 +70,7 @@ test-suite trisagion-tests
         tests
     main-is: Spec.hs
     build-depends:
-        hspec ^>=2.11 && <2.12,
+        hspec >=2.11 && <2.12,
         mono,
     build-tool-depends:
         hspec-discover:hspec-discover
