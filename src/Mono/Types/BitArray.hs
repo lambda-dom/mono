@@ -22,7 +22,7 @@ module Mono.Types.BitArray (
 -- Base.
 import Data.Bits (FiniteBits (finiteBitSize), Bits ((.|.), zeroBits, complement, testBit))
 import qualified Data.Bits as Bits (bit)
-import Data.Foldable (Foldable (foldl'))
+import Data.Foldable (foldl')
 import Data.Ix (Ix)
 
 -- Package.
