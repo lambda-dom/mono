@@ -32,9 +32,9 @@ library
         -- GHC >= 9.10
         base >=4.20 && <4.21,
         bytestring >=0.12 && <0.13,
-        -- containers >=0.7 && <0.8,
-        -- text >=2.1 && <2.2,
-        -- vector >=0.13 && <0.14,
+        containers >=0.7 && <0.8,
+        text >=2.1 && <2.2,
+        vector >=0.13 && <0.14,
     ghc-options:
         -Wall
         -Wcompat
