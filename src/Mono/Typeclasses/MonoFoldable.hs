@@ -193,7 +193,6 @@ instance MonoFoldable a (Either e a) where
 
 
 -- Libraries.
--- Libraries.
 instance MonoFoldable Word8 Bytes.ByteString where
     {-# INLINE monotoList #-}
     monotoList :: Bytes.ByteString -> [Word8]
