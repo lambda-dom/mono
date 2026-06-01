@@ -12,7 +12,7 @@ maintainer:         grodrigues.math@gmail.com
 copyright:          2025 G. Rodrigues
 build-type:         Simple
 tested-with:
-    GHC == {9.6.7, 9.8.4}
+    GHC == {9.10.3}
 extra-doc-files:
     LICENSE
     README.md
@@ -29,8 +29,12 @@ library
         TypeFamilies
         FunctionalDependencies
     build-depends:
-        -- GHC 9.10
-        base >=4.20,
+        -- GHC >= 9.10
+        base >=4.20 && <4.21,
+        bytestring >=0.12 && <0.13,
+        containers >=0.7 && <0.8,
+        text >=2.1 && <2.2,
+        vector >=0.13 && <0.14,
     ghc-options:
         -Wall
         -Wcompat

@@ -15,6 +15,19 @@ import Data.Foldable (Foldable (..))
 import Data.List (singleton)
 import Data.List.NonEmpty (NonEmpty)
 import Data.Maybe (isNothing)
+import Data.Word (Word8)
+
+-- Libraries.
+import qualified Data.ByteString as Bytes (ByteString, unpack, null, length, foldr, foldl', elem)
+import qualified Data.ByteString.Lazy as LBytes (ByteString, unpack, null, length, foldr, foldl', elem)
+import qualified Data.ByteString.Short as SBytes (ShortByteString, unpack, null, length, foldr, foldl', elem)
+import qualified Data.Text as Text (Text, unpack, null, length, foldr, foldl', elem)
+import qualified Data.Text.Lazy as LText (Text, unpack, null, length, foldr, foldl', elem)
+import Data.Sequence (Seq)
+import Data.Vector (Vector)
+import qualified Data.Vector.Strict as SVector (Vector)
+import qualified Data.Vector.Unboxed as UVector (Vector, Unbox, toList, null, length, foldMap', foldl', foldr, elem)
+import qualified Data.Vector.Storable as StVector (Vector, Storable, toList, null, length, foldMap', foldl', foldr, elem)
 
 -- Package.
 import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
@@ -65,6 +78,7 @@ class MonoFunctor a s => MonoFoldable a s where
 
 
 -- Foldable instances.
+-- Base.
 instance MonoFoldable a [a] where
     {-# INLINE monotoList #-}
     monotoList :: [a] -> [a]
@@ -176,3 +190,263 @@ instance MonoFoldable a (Either e a) where
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> Either e a -> Bool
     monoelem x = either (const False) (x ==)
+
+
+-- Libraries.
+instance MonoFoldable Word8 Bytes.ByteString where
+    {-# INLINE monotoList #-}
+    monotoList :: Bytes.ByteString -> [Word8]
+    monotoList = Bytes.unpack
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (Word8 -> a -> a) -> a -> Bytes.ByteString -> a
+    monofoldr = Bytes.foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (a -> Word8 -> a) -> a -> Bytes.ByteString -> a
+    monofoldl = Bytes.foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: Bytes.ByteString -> Bool
+    mononull = Bytes.null
+
+    {-# INLINE monolength #-}
+    monolength :: Bytes.ByteString -> Word
+    monolength = fromIntegral . Bytes.length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Word8 -> Bytes.ByteString -> Bool
+    monoelem = Bytes.elem
+
+instance MonoFoldable Word8 LBytes.ByteString where
+    {-# INLINE monotoList #-}
+    monotoList :: LBytes.ByteString -> [Word8]
+    monotoList = LBytes.unpack
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (Word8 -> a -> a) -> a -> LBytes.ByteString -> a
+    monofoldr = LBytes.foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (a -> Word8 -> a) -> a -> LBytes.ByteString -> a
+    monofoldl = LBytes.foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: LBytes.ByteString -> Bool
+    mononull = LBytes.null
+
+    {-# INLINE monolength #-}
+    monolength :: LBytes.ByteString -> Word
+    monolength = fromIntegral . LBytes.length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Word8 -> LBytes.ByteString -> Bool
+    monoelem = LBytes.elem
+
+instance MonoFoldable Word8 SBytes.ShortByteString where
+    {-# INLINE monotoList #-}
+    monotoList :: SBytes.ShortByteString -> [Word8]
+    monotoList = SBytes.unpack
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (Word8 -> a -> a) -> a -> SBytes.ShortByteString -> a
+    monofoldr = SBytes.foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (a -> Word8 -> a) -> a -> SBytes.ShortByteString -> a
+    monofoldl = SBytes.foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: SBytes.ShortByteString -> Bool
+    mononull = SBytes.null
+
+    {-# INLINE monolength #-}
+    monolength :: SBytes.ShortByteString -> Word
+    monolength = fromIntegral . SBytes.length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Word8 -> SBytes.ShortByteString -> Bool
+    monoelem = SBytes.elem
+
+instance MonoFoldable Char Text.Text where
+    {-# INLINE monotoList #-}
+    monotoList :: Text.Text -> [Char]
+    monotoList = Text.unpack
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (Char -> a -> a) -> a -> Text.Text -> a
+    monofoldr = Text.foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (a -> Char -> a) -> a -> Text.Text -> a
+    monofoldl = Text.foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: Text.Text -> Bool
+    mononull = Text.null
+
+    {-# INLINE monolength #-}
+    monolength :: Text.Text -> Word
+    monolength = fromIntegral . Text.length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Char -> Text.Text -> Bool
+    monoelem = Text.elem
+
+instance MonoFoldable Char LText.Text where
+    {-# INLINE monotoList #-}
+    monotoList :: LText.Text -> [Char]
+    monotoList = LText.unpack
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (Char -> a -> a) -> a -> LText.Text -> a
+    monofoldr = LText.foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (a -> Char -> a) -> a -> LText.Text -> a
+    monofoldl = LText.foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: LText.Text -> Bool
+    mononull = LText.null
+
+    {-# INLINE monolength #-}
+    monolength :: LText.Text -> Word
+    monolength = fromIntegral . LText.length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Char -> LText.Text -> Bool
+    monoelem = LText.elem
+
+instance MonoFoldable a (Seq a) where
+    {-# INLINE monotoList #-}
+    monotoList :: Seq a -> [a]
+    monotoList = toList
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (a -> b -> b) -> b -> Seq a -> b
+    monofoldr = foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (b -> a -> b) -> b -> Seq a -> b
+    monofoldl = foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: Seq a -> Bool
+    mononull = null
+
+    {-# INLINE monolength #-}
+    monolength :: Seq a -> Word
+    monolength = fromIntegral . length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Eq a => a -> Seq a -> Bool
+    monoelem = elem
+
+instance MonoFoldable a (Vector a) where
+    {-# INLINE monotoList #-}
+    monotoList :: Vector a -> [a]
+    monotoList = toList
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (a -> b -> b) -> b -> Vector a -> b
+    monofoldr = foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (b -> a -> b) -> b -> Vector a -> b
+    monofoldl = foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: Vector a -> Bool
+    mononull = null
+
+    {-# INLINE monolength #-}
+    monolength :: Vector a -> Word
+    monolength = fromIntegral . length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Eq a => a -> Vector a -> Bool
+    monoelem = elem
+
+instance MonoFoldable a (SVector.Vector a) where
+    {-# INLINE monotoList #-}
+    monotoList :: SVector.Vector a -> [a]
+    monotoList = toList
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (a -> b -> b) -> b -> SVector.Vector a -> b
+    monofoldr = foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (b -> a -> b) -> b -> SVector.Vector a -> b
+    monofoldl = foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: SVector.Vector a -> Bool
+    mononull = null
+
+    {-# INLINE monolength #-}
+    monolength :: SVector.Vector a -> Word
+    monolength = fromIntegral . length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Eq a => a -> SVector.Vector a -> Bool
+    monoelem = elem
+
+instance UVector.Unbox a => MonoFoldable a (UVector.Vector a) where
+    {-# INLINE monotoList #-}
+    monotoList :: UVector.Vector a -> [a]
+    monotoList = UVector.toList
+
+    {-# INLINEABLE monofoldMap #-}
+    monofoldMap :: Monoid m => (a -> m) -> UVector.Vector a -> m
+    monofoldMap = UVector.foldMap'
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (a -> b -> b) -> b -> UVector.Vector a -> b
+    monofoldr = UVector.foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (b -> a -> b) -> b -> UVector.Vector a -> b
+    monofoldl = UVector.foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: UVector.Vector a -> Bool
+    mononull = UVector.null
+
+    {-# INLINE monolength #-}
+    monolength :: UVector.Vector a -> Word
+    monolength = fromIntegral . UVector.length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Eq a => a -> UVector.Vector a -> Bool
+    monoelem = UVector.elem
+
+instance StVector.Storable a => MonoFoldable a (StVector.Vector a) where
+    {-# INLINE monotoList #-}
+    monotoList :: StVector.Vector a -> [a]
+    monotoList = StVector.toList
+
+    {-# INLINEABLE monofoldMap #-}
+    monofoldMap :: Monoid m => (a -> m) -> StVector.Vector a -> m
+    monofoldMap = StVector.foldMap'
+
+    {-# INLINE monofoldr #-}
+    monofoldr :: (a -> b -> b) -> b -> StVector.Vector a -> b
+    monofoldr = StVector.foldr
+
+    {-# INLINE monofoldl #-}
+    monofoldl :: (b -> a -> b) -> b -> StVector.Vector a -> b
+    monofoldl = StVector.foldl'
+
+    {-# INLINE mononull #-}
+    mononull :: StVector.Vector a -> Bool
+    mononull = StVector.null
+
+    {-# INLINE monolength #-}
+    monolength :: StVector.Vector a -> Word
+    monolength = fromIntegral . StVector.length
+
+    {-# INLINE monoelem #-}
+    monoelem :: Eq a => a -> StVector.Vector a -> Bool
+    monoelem = StVector.elem
