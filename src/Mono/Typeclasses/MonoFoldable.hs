@@ -68,8 +68,8 @@ class MonoFunctor a s => MonoFoldable a s where
 
     {- | The number of elements in the monofoldable. -}
     {-# INLINEABLE monolength #-}
-    monolength :: s -> Word
-    monolength = fromIntegral . length . monotoList
+    monolength :: s -> Int
+    monolength = length . monotoList
 
     {- | Return True if @elem@ is an element of the monofoldable. -}
     {-# INLINEABLE monoelem #-}
@@ -101,8 +101,8 @@ instance MonoFoldable a [a] where
     mononull = null
 
     {-# INLINE monolength #-}
-    monolength :: [a] -> Word
-    monolength = fromIntegral . length
+    monolength :: [a] -> Int
+    monolength = length
 
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> [a] -> Bool
@@ -126,8 +126,8 @@ instance MonoFoldable a (NonEmpty a) where
     mononull = null
 
     {-# INLINE monolength #-}
-    monolength :: NonEmpty a -> Word
-    monolength = fromIntegral . length
+    monolength :: NonEmpty a -> Int
+    monolength = length
 
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> NonEmpty a -> Bool
@@ -155,7 +155,7 @@ instance MonoFoldable a (Maybe a) where
     mononull = isNothing
 
     {-# INLINE monolength #-}
-    monolength :: Maybe a -> Word
+    monolength :: Maybe a -> Int
     monolength = maybe 0 (const 1)
 
     {-# INLINE monoelem #-}
@@ -184,7 +184,7 @@ instance MonoFoldable a (Either e a) where
     mononull = either (const True) (const False)
 
     {-# INLINE monolength #-}
-    monolength :: Either e a -> Word
+    monolength :: Either e a -> Int
     monolength = either (const 0) (const 1)
 
     {-# INLINE monoelem #-}
@@ -211,8 +211,8 @@ instance MonoFoldable Word8 Bytes.ByteString where
     mononull = Bytes.null
 
     {-# INLINE monolength #-}
-    monolength :: Bytes.ByteString -> Word
-    monolength = fromIntegral . Bytes.length
+    monolength :: Bytes.ByteString -> Int
+    monolength = Bytes.length
 
     {-# INLINE monoelem #-}
     monoelem :: Word8 -> Bytes.ByteString -> Bool
@@ -235,8 +235,14 @@ instance MonoFoldable Word8 LBytes.ByteString where
     mononull :: LBytes.ByteString -> Bool
     mononull = LBytes.null
 
+    {- | The length of a lazy bytestring.
+
+    note(s):
+
+        * The result is an @Int64@ coerced to an 'Int'.
+    -}
     {-# INLINE monolength #-}
-    monolength :: LBytes.ByteString -> Word
+    monolength :: LBytes.ByteString -> Int
     monolength = fromIntegral . LBytes.length
 
     {-# INLINE monoelem #-}
@@ -261,8 +267,8 @@ instance MonoFoldable Word8 SBytes.ShortByteString where
     mononull = SBytes.null
 
     {-# INLINE monolength #-}
-    monolength :: SBytes.ShortByteString -> Word
-    monolength = fromIntegral . SBytes.length
+    monolength :: SBytes.ShortByteString -> Int
+    monolength = SBytes.length
 
     {-# INLINE monoelem #-}
     monoelem :: Word8 -> SBytes.ShortByteString -> Bool
@@ -286,8 +292,8 @@ instance MonoFoldable Char Text.Text where
     mononull = Text.null
 
     {-# INLINE monolength #-}
-    monolength :: Text.Text -> Word
-    monolength = fromIntegral . Text.length
+    monolength :: Text.Text -> Int
+    monolength = Text.length
 
     {-# INLINE monoelem #-}
     monoelem :: Char -> Text.Text -> Bool
@@ -310,8 +316,14 @@ instance MonoFoldable Char LText.Text where
     mononull :: LText.Text -> Bool
     mononull = LText.null
 
+    {- | The length of a lazy text.
+
+    note(s):
+
+        * The result is an @Int64@ coerced to an 'Int'.
+    -}
     {-# INLINE monolength #-}
-    monolength :: LText.Text -> Word
+    monolength :: LText.Text -> Int
     monolength = fromIntegral . LText.length
 
     {-# INLINE monoelem #-}
@@ -336,8 +348,8 @@ instance MonoFoldable a (Seq a) where
     mononull = null
 
     {-# INLINE monolength #-}
-    monolength :: Seq a -> Word
-    monolength = fromIntegral . length
+    monolength :: Seq a -> Int
+    monolength = length
 
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> Seq a -> Bool
@@ -361,8 +373,8 @@ instance MonoFoldable a (Vector a) where
     mononull = null
 
     {-# INLINE monolength #-}
-    monolength :: Vector a -> Word
-    monolength = fromIntegral . length
+    monolength :: Vector a -> Int
+    monolength = length
 
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> Vector a -> Bool
@@ -386,8 +398,8 @@ instance MonoFoldable a (SVector.Vector a) where
     mononull = null
 
     {-# INLINE monolength #-}
-    monolength :: SVector.Vector a -> Word
-    monolength = fromIntegral . length
+    monolength :: SVector.Vector a -> Int
+    monolength = length
 
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> SVector.Vector a -> Bool
@@ -415,8 +427,8 @@ instance UVector.Unbox a => MonoFoldable a (UVector.Vector a) where
     mononull = UVector.null
 
     {-# INLINE monolength #-}
-    monolength :: UVector.Vector a -> Word
-    monolength = fromIntegral . UVector.length
+    monolength :: UVector.Vector a -> Int
+    monolength = UVector.length
 
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> UVector.Vector a -> Bool
@@ -444,8 +456,8 @@ instance StVector.Storable a => MonoFoldable a (StVector.Vector a) where
     mononull = StVector.null
 
     {-# INLINE monolength #-}
-    monolength :: StVector.Vector a -> Word
-    monolength = fromIntegral . StVector.length
+    monolength :: StVector.Vector a -> Int
+    monolength = StVector.length
 
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> StVector.Vector a -> Bool
