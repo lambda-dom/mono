@@ -16,3 +16,4 @@
 
 * Start of a README.
 * The `MonoPointed` typeclass.
+* Extra typeclass law for `MonoFoldable`.
