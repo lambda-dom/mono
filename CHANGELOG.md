@@ -11,3 +11,8 @@
 ## Version 0.3.0.0
 
 * Change result type of `monolength` from `Word` to `Int` to synch with the rest of the ecosystem.
+
+### Version 0.3.1.0
+
+* Start of a README.
+* The `MonoPointed` typeclass.
