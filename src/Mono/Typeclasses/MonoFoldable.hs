@@ -39,6 +39,11 @@ All methods have a default implementation in terms of 'monotoList' and it is imp
 that any overriding definitions are extensionally equal to the default ones. Given this assumption:
 
 __Mononaturality__: @'monotoList' :: s -> [a]@ is mononatural.
+
+If the 'MonoFoldable' is also a 'Mono.Typeclass.MonoPointed.MonoPointed' then we require the following
+compatibility codition:
+
+__Compatibility__: @'monotoList' . monopoint == monopoint@
 -}
 class MonoFunctor a s => MonoFoldable a s where
     {-# MINIMAL monotoList #-}
