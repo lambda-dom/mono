@@ -62,3 +62,18 @@ library
         Mono.Typeclasses.MonoFunctor
         Mono.Typeclasses.MonoPointed
         Mono.Typeclasses.MonoFoldable
+
+test-suite optics-conversions-tests
+    import:
+        common-fields
+    hs-source-dirs:
+        tests
+    type: exitcode-stdio-1.0
+    main-is: Main.hs
+    build-depends:
+        -- mono,
+        -- Libraries.
+        tasty         >=1.5 && <1.6,
+        -- falsify       >=0.4 && <0.5,
+        -- tasty-falsify >=0.1 && <0.2,
+    other-modules:
