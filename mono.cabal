@@ -79,3 +79,4 @@ test-suite optics-conversions-tests
     other-modules:
         Lib.Gen
         Lib.MonoFunctor
+        Tests.Typeclasses.MonoFunctor
