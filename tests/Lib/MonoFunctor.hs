@@ -23,7 +23,7 @@ import Data.String (fromString)
 -- Testing.
 import Test.Falsify (Property, Gen, Predicate, Fun, pattern Fn, (.$), assert, gen)
 import Test.Falsify.Generator (Function, fun)
-import Test.Falsify.Predicate (prettyExpr, unary)
+import Test.Falsify.Predicate (satisfies)
 
 -- Module to test.
 import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
@@ -36,9 +36,7 @@ isExtensionallyEqual
     -> (String, a -> b)
     -> Predicate '[a]
 isExtensionallyEqual (xs, f) (ys, g) =
-    unary
-        (\ x -> f x == g x)
-        (\ e -> let zs = " applied to " ++ prettyExpr e in xs ++ zs ++ " not equal to " ++ ys ++ zs)
+    satisfies (fromString $ "Predicate " ++ xs ++ " == " ++ ys, \ x -> f x == g x)
 
 
 {- | Test extensional equality of two functions. -}
@@ -60,8 +58,8 @@ test_monofunctor_identity
     -> Property ()
 test_monofunctor_identity =
     test_extensional_equality
-        ("Monomap of the identity", monomap id)
-        ("Identity", id)
+        ("monomap id", monomap id)
+        ("id", id)
 
 {- | Test 'MonoFunctor' composition law. -}
 test_monofunctor_composition
@@ -70,12 +68,15 @@ test_monofunctor_composition
     -> Gen s
     -> Property ()
 test_monofunctor_composition genA genS = do
-        Fn f <- gen genFun
-        Fn g <- gen genFun
+        f <- gen genFun
+        g <- gen genFun
+        let
+            Fn f' = f
+            Fn g' = g
         xs <- gen genS
         assert $ isExtensionallyEqual
-            ("Monomap composition", monomap (f . g))
-            ("Composition of monomaps", monomap f . monomap g)
+            ("monomap (" ++ show f ++ " . " ++ show g ++ ")", monomap (f' . g'))
+            ("monomap (" ++ show f ++ ") . monomap (" ++ show g ++ ")", monomap f' . monomap g')
             .$ (fromString "xs", xs)
     where
         genFun :: Gen (Fun a a)
@@ -96,15 +97,16 @@ test_mononaturality
     :: forall a s t . (MonoFunctor a s, MonoFunctor a t, Function a, Show a, Show s, Eq t)
     => Gen a
     -> Gen s
-    -> (s -> t)
+    -> (String, s -> t)
     -> Property ()
-test_mononaturality genA genS h = do
-        Fn f <- gen genFun
-        xs   <- gen genS
+test_mononaturality genA genS (xs, h) = do
+        f <- gen genFun
+        let Fn f' = f
+        ys   <- gen genS
         assert $ isExtensionallyEqual
-            ("Monomap post-composition", h . monomap f)
-            ("Monomap pre-composition", monomap f . h)
-            .$ (fromString "xs", xs)
+            (xs ++ " . monomap " ++ show f, h . monomap f')
+            ("monomap " ++ show f ++ " . " ++ xs, monomap f' . h)
+            .$ (fromString "ys", ys)
     where
         genFun :: Gen (Fun a a)
         genFun = fun genA
