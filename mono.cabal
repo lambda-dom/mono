@@ -30,6 +30,7 @@ common common-fields
         base >=4.20 && <4.21,
         -- Libraries.
         bytestring >=0.12 && <0.13,
+        text >=2.1 && <2.2,
     ghc-options:
         -Wall
         -Wcompat
@@ -55,7 +56,6 @@ library
     build-depends:
         -- Libraries.
         containers >=0.7 && <0.8,
-        text >=2.1 && <2.2,
         vector >=0.13 && <0.14,
     hs-source-dirs:
         src
