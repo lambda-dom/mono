@@ -28,6 +28,8 @@ common common-fields
     build-depends:
         -- GHC >= 9.10
         base >=4.20 && <4.21,
+        -- Libraries.
+        bytestring >=0.12 && <0.13,
     ghc-options:
         -Wall
         -Wcompat
@@ -52,7 +54,6 @@ library
         FunctionalDependencies
     build-depends:
         -- Libraries.
-        bytestring >=0.12 && <0.13,
         containers >=0.7 && <0.8,
         text >=2.1 && <2.2,
         vector >=0.13 && <0.14,
@@ -63,7 +64,7 @@ library
         Mono.Typeclasses.MonoPointed
         Mono.Typeclasses.MonoFoldable
 
-test-suite optics-conversions-tests
+test-suite mono-tests
     import:
         common-fields
     hs-source-dirs:
@@ -75,7 +76,7 @@ test-suite optics-conversions-tests
         -- Libraries.
         tasty         >=1.5 && <1.6,
         falsify       >=0.4 && <0.5,
-        -- tasty-falsify >=0.1 && <0.2,
+        tasty-falsify >=0.1 && <0.2,
     other-modules:
         Lib.Gen
         Lib.MonoFunctor

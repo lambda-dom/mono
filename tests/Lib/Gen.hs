@@ -3,32 +3,36 @@
 module Lib.Gen (
     -- * Generators for integral, primitive types.
     integral,
-    
-    -- * Tuple generators.
-    pair,
 
-    -- * Enumeration generators.
-    enumFull,
+    -- ** Specializations.
+    word8,
+
+    -- * List-like generators.
+    byteString,
 ) where
 
 -- Imports.
 -- Base.
 import Data.Bits (FiniteBits)
+import Data.Word (Word8)
+
+-- Libraries.
+import qualified Data.ByteString as Bytes (ByteString, pack)
 
 -- Testing.
 import Test.Falsify (Gen)
-import Test.Falsify.Generator (inRange)
-import Test.Falsify.Range (enum, uniform)
+import Test.Falsify.Generator (inRange, list)
+import Test.Falsify.Range (uniform, inclusive)
 
 
 {- | Generator for bounded integral types with a finite number of bits. Biased towards zero. -}
 integral :: forall a . (Integral a, Bounded a, FiniteBits a) => Gen a
 integral = inRange $ uniform @a
 
-{- | Generator for pairs. -}
-pair :: Gen a -> Gen b -> Gen (a, b)
-pair g h = (,) <$> g <*> h
+{- | Specialization of 'integral' to 'Word8'. -}
+word8 :: Gen Word8
+word8 = integral
 
-{- | Generator for the full range of a bounded enumeration. -}
-enumFull :: (Enum a, Bounded a) => Gen a
-enumFull = inRange $ enum (minBound, maxBound)
+{- | Generate a (strict) 'ByteString' up to length @n@ shrinking towards 0. -}
+byteString :: Word -> Gen Bytes.ByteString
+byteString n = Bytes.pack <$> list (inclusive (0, n)) word8
