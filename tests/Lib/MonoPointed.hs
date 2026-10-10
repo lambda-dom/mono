@@ -31,12 +31,9 @@ test_monopointed_laws genA = do
         Fn f <- gen genFun
         x    <- gen genA
         assert $ isExtensionallyEqual
-            ("Monomap post-composition", monop . f)
-            ("Monomap pre-composition", monomap f . monop)
+            ("Monomap post-composition", monopoint @a @s . f)
+            ("Monomap pre-composition", monomap f . monopoint @a @s)
             .$ (fromString "x", x)
     where
         genFun :: Gen (Fun a a)
         genFun = fun genA
-
-        monop :: a -> s
-        monop = monopoint
