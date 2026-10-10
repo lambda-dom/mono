@@ -18,5 +18,7 @@
 * The `MonoPointed` typeclass.
 * Extra typeclass law for `MonoFoldable`.
 
-### Version 0.3.2.0 -- unreleased.
+### Version 0.3.2.0.
 
+* Typeclass tests.
+* Haddock improvements.
