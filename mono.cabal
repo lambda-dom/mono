@@ -81,5 +81,7 @@ test-suite mono-tests
         Lib.Gen
         Lib.MonoFunctor
         Lib.MonoPointed
+        Lib.MonoFoldable
         Tests.Typeclasses.MonoFunctor
         Tests.Typeclasses.MonoPointed
+        Tests.Typeclasses.MonoFoldable

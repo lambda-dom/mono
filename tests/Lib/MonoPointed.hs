@@ -28,9 +28,9 @@ test_monopointed_laws
     => Gen a
     -> Property ()
 test_monopointed_laws genA = do
+        x <- gen genA
         f <- gen genFun
         let Fn f' = f
-        x    <- gen genA
         assert $ isExtensionallyEqual
             ("monopoint . " ++ show f, monopoint @a @s . f')
             ("monomap " ++ show f ++ " . monopoint", monomap f' . monopoint @a @s)
