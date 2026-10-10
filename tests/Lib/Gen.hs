@@ -51,8 +51,9 @@ char = inRange $ enum (maxBound, minBound)
 
 {- | Generator for 'Char'.
 
-Performs replacement on invalid scalar values using the 'safe' function from 'Data.Text.Internal'.
-This is required when using the text package as many functions perform such a replacement.
+Performs replacement on invalid scalar values using the 'Data.Text.Internal.safe' function from
+'Data.Text.Internal'. This is required when using the text package as many functions perform such a
+replacement.
 -}
 safeChar :: Gen Char
 safeChar = Internal.safe <$> char

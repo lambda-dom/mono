@@ -80,4 +80,6 @@ test-suite mono-tests
     other-modules:
         Lib.Gen
         Lib.MonoFunctor
+        Lib.MonoPointed
         Tests.Typeclasses.MonoFunctor
+        Tests.Typeclasses.MonoPointed

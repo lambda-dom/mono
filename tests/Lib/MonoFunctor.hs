@@ -2,12 +2,18 @@
 {-# LANGUAGE PatternSynonyms #-}
 
 module Lib.MonoFunctor (
+    -- * Predicates.
+    isExtensionallyEqual,
+
     -- * Properties.
     -- ** Extensional equality of functions.
     test_extensional_equality,
 
-    -- * Typeclass laws.
+    -- * 'MonoFunctor' typeclass laws.
     test_monofunctor_laws,
+
+    -- * Mononaturality.
+    test_mononaturality,
 ) where
 
 -- Imports.
@@ -83,3 +89,22 @@ test_monofunctor_laws
 test_monofunctor_laws genA genS
     =  test_monofunctor_identity genS
     *> test_monofunctor_composition genA genS
+
+
+{- | Test mononaturality of a function. -}
+test_mononaturality
+    :: forall a s t . (MonoFunctor a s, MonoFunctor a t, Function a, Show a, Show s, Eq t)
+    => Gen a
+    -> Gen s
+    -> (s -> t)
+    -> Property ()
+test_mononaturality genA genS h = do
+        Fn f <- gen genFun
+        xs   <- gen genS
+        assert $ isExtensionallyEqual
+            ("Monomap post-composition", h . monomap f)
+            ("Monomap pre-composition", monomap f . h)
+            .$ (fromString "xs", xs)
+    where
+        genFun :: Gen (Fun a a)
+        genFun = fun genA

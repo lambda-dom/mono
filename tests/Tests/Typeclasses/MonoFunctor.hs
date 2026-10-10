@@ -28,7 +28,7 @@ test_monofunctor_laws_text =
         (test_monofunctor_laws ascii (asciiText 10))
 
 
-{- | Test group for optics in the Bits module. -}
+{- | Test group for the MonoFunctor module. -}
 tests :: TestTree
 tests =
     testGroup

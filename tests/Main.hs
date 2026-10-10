@@ -4,6 +4,7 @@ import Test.Tasty (defaultMain, testGroup)
 
 -- Package.
 import qualified Tests.Typeclasses.MonoFunctor as MonoFunctor (tests)
+import qualified Tests.Typeclasses.MonoPointed as MonoPointed (tests)
 
 
 -- Main test driver.
@@ -12,4 +13,4 @@ main =
     defaultMain $
         testGroup
         "Package tests."
-        [MonoFunctor.tests]
+        [MonoFunctor.tests, MonoPointed.tests]
