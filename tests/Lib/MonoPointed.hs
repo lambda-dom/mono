@@ -28,11 +28,12 @@ test_monopointed_laws
     => Gen a
     -> Property ()
 test_monopointed_laws genA = do
-        Fn f <- gen genFun
+        f <- gen genFun
+        let Fn f' = f
         x    <- gen genA
         assert $ isExtensionallyEqual
-            ("Monomap post-composition", monopoint @a @s . f)
-            ("Monomap pre-composition", monomap f . monopoint @a @s)
+            ("monopoint . " ++ show f, monopoint @a @s . f')
+            ("monomap " ++ show f ++ " . monopoint", monomap f' . monopoint @a @s)
             .$ (fromString "x", x)
     where
         genFun :: Gen (Fun a a)
