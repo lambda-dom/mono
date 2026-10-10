@@ -71,11 +71,11 @@ test-suite optics-conversions-tests
     type: exitcode-stdio-1.0
     main-is: Main.hs
     build-depends:
-        -- mono,
+        mono,
         -- Libraries.
         tasty         >=1.5 && <1.6,
         falsify       >=0.4 && <0.5,
         -- tasty-falsify >=0.1 && <0.2,
     other-modules:
         Lib.Gen
-        Lib.Laws
+        Lib.MonoFunctor
