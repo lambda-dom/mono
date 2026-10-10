@@ -1,6 +1,5 @@
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
-{-# LANGUAGE RequiredTypeArguments #-}
 
 module Lib.MonoPointed (
     -- * Tests.
