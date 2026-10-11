@@ -36,7 +36,8 @@ import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
 {- | The typeclass for monofunctors that can be folded over, the monomorphic version of 'Foldable'.
 
 All methods have a default implementation in terms of 'monotoList' and it is implicitly assumed
-that any overriding definitions are extensionally equal to the default ones. Given this assumption:
+that any overriding definitions are extensionally equal to the default ones. In other words, each
+default definition is an implied typeclass law. With this assumption:
 
 __Mononaturality__: @'monotoList' :: s -> [a]@ is mononatural.
 
@@ -51,32 +52,50 @@ class MonoFunctor a s => MonoFoldable a s where
     {- | Convert a monofoldable to a list. -}
     monotoList :: s -> [a]
 
-    {- | Strict fold with a function @'Monoid' m => a -> m@. -}
+    {- | Strict fold with a function @'Monoid' m => a -> m@.
+
+    Default definition: @foldl' (<>) mempty . fmap f . monotoList@
+    -}
     {-# INLINEABLE monofoldMap #-}
     monofoldMap :: Monoid m => (a -> m) -> s -> m
     monofoldMap f = foldl' (<>) mempty . fmap f . monotoList
 
-    {- | Lazy right-associative fold of a monofoldable. -}
+    {- | Lazy right-associative fold of a monofoldable.
+
+    Default definition: @foldr f x . monotoList@
+    -}
     {-# INLINEABLE monofoldr #-}
     monofoldr :: (a -> b -> b) -> b -> s -> b
     monofoldr f x = foldr f x . monotoList
 
-    {- | Right-associative, strict in the accumulator, fold of a monofoldable. -}
+    {- | Right-associative, strict in the accumulator, fold of a monofoldable.
+
+    Default definition: @foldl' f x $ monotoList xs@
+    -}
     {-# INLINEABLE monofoldl #-}
     monofoldl :: (b -> a -> b) -> b -> s -> b
     monofoldl f x xs = foldl' f x $ monotoList xs
 
-    {- | Return true if the monofoldable has no elements. -}
+    {- | Return true if the monofoldable has no elements.
+
+    Default definition: @null . monotoList@
+    -}
     {-# INLINEABLE mononull #-}
     mononull :: s -> Bool
     mononull = null . monotoList
 
-    {- | The number of elements in the monofoldable. -}
+    {- | The number of elements in the monofoldable.
+
+    Default definition: @length . monotoList@
+    -}
     {-# INLINEABLE monolength #-}
     monolength :: s -> Int
     monolength = length . monotoList
 
-    {- | Return True if @elem@ is an element of the monofoldable. -}
+    {- | Return True if @elem@ is an element of the monofoldable.
+
+    Default definition: @(x `elem`) . monotoList@
+    -}
     {-# INLINEABLE monoelem #-}
     monoelem :: Eq a => a -> s -> Bool
     monoelem x = (x `elem`) . monotoList

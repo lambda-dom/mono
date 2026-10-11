@@ -34,16 +34,21 @@ import Mono.Typeclasses.MonoFunctor (MonoFunctor)
 
 There is one law that the typeclass must satisfy:
 
-__Mononaturality__: @'monopoint' :: a -> f@ is mononatural. Specifically, we
-have for all @g :: a -> a@:
+__Mononaturality__: @'monopoint' :: a -> s@ is mononatural. Specifically, we
+have for all @f :: a -> a@:
 
 @
-    monomap g . monopoint == monopoint . g
+    monomap f . monopoint == monopoint . f
 @
+
+note(s):
+
+    * Because the type @s@ of the 'MonoPointed' does not appear in the argument of 'monopoint', type
+    annotations are often required.
 -}
-class MonoFunctor a f => MonoPointed a f where
+class MonoFunctor a s => MonoPointed a s where
     {- | Embed an element in the 'MonoFunctor'. -}
-    monopoint :: a -> f
+    monopoint :: a -> s
 
 
 -- Instances.

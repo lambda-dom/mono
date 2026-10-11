@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               mono
-version:            0.3.1.0
+version:            0.1.0.0
 synopsis:           Monomorphic versions of typeclasses Functor, Foldable and Traversable.
 description:        Please see the README on GitHub at <https://github.com/lambda-dom/mono#readme>
 category:           Data
@@ -22,19 +22,15 @@ source-repository head
     type: git
     location: https://github.com/lambda-dom/mono
 
-library
+
+common common-fields
     default-language: GHC2021
-    default-extensions:
-        DerivingStrategies
-        TypeFamilies
-        FunctionalDependencies
     build-depends:
         -- GHC >= 9.10
         base >=4.20 && <4.21,
+        -- Libraries.
         bytestring >=0.12 && <0.13,
-        containers >=0.7 && <0.8,
         text >=2.1 && <2.2,
-        vector >=0.13 && <0.14,
     ghc-options:
         -Wall
         -Wcompat
@@ -47,10 +43,45 @@ library
         -Wredundant-constraints
         -Wmissing-deriving-strategies
         -Wunused-packages
+        -- Prepare for dependent types.
+        -Wterm-variable-capture
+
+library
+    import:
+        common-fields
+    default-extensions:
+        DerivingStrategies
+        TypeFamilies
+        FunctionalDependencies
+    build-depends:
+        -- Libraries.
+        containers >=0.7 && <0.8,
+        vector >=0.13 && <0.14,
     hs-source-dirs:
         src
-    other-modules:
     exposed-modules:
         Mono.Typeclasses.MonoFunctor
         Mono.Typeclasses.MonoPointed
         Mono.Typeclasses.MonoFoldable
+
+test-suite mono-tests
+    import:
+        common-fields
+    hs-source-dirs:
+        tests
+    type: exitcode-stdio-1.0
+    main-is: Main.hs
+    build-depends:
+        mono,
+        -- Libraries.
+        tasty         >=1.5 && <1.6,
+        falsify       >=0.4 && <0.5,
+        tasty-falsify >=0.1 && <0.2,
+    other-modules:
+        Lib.Gen
+        Lib.MonoFunctor
+        Lib.MonoPointed
+        Lib.MonoFoldable
+        Tests.Typeclasses.MonoFunctor
+        Tests.Typeclasses.MonoPointed
+        Tests.Typeclasses.MonoFoldable
