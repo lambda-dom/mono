@@ -11,7 +11,8 @@ module Mono.Typeclasses.MonoPointed (
 
 -- Imports.
 -- Base.
-import Data.List.NonEmpty (NonEmpty)
+import qualified Data.List as List (singleton)
+import qualified Data.List.NonEmpty as NonEmpty (NonEmpty, singleton)
 import Data.Word (Word8)
 
 -- Libraries.
@@ -20,9 +21,9 @@ import qualified Data.ByteString.Lazy as LBytes (ByteString, singleton)
 import qualified Data.ByteString.Short as SBytes (ShortByteString, singleton)
 import qualified Data.Text as Text (Text, singleton)
 import qualified Data.Text.Lazy as LText (Text, singleton)
-import Data.Sequence (Seq)
-import Data.Vector (Vector)
-import qualified Data.Vector.Strict as SVector (Vector)
+import qualified Data.Sequence as Seq (Seq, singleton)
+import qualified Data.Vector as Vector (Vector, singleton)
+import qualified Data.Vector.Strict as SVector (Vector, singleton)
 import qualified Data.Vector.Unboxed as UVector (Vector, Unbox, singleton)
 import qualified Data.Vector.Storable as StVector (Vector, Storable, singleton)
 
@@ -82,37 +83,37 @@ instance MonoPointed Char LText.Text where
 instance MonoPointed a [a] where
     {-# INLINE monopoint #-}
     monopoint :: a -> [a]
-    monopoint = pure
+    monopoint = List.singleton
 
-instance MonoPointed a (NonEmpty a) where
+instance MonoPointed a (NonEmpty.NonEmpty a) where
     {-# INLINE monopoint #-}
-    monopoint :: a -> NonEmpty a
-    monopoint = pure
+    monopoint :: a -> NonEmpty.NonEmpty a
+    monopoint = NonEmpty.singleton
 
 instance MonoPointed a (Maybe a) where
     {-# INLINE monopoint #-}
     monopoint :: a -> Maybe a
-    monopoint = pure
+    monopoint = Just
 
 instance MonoPointed a (Either e a) where
     {-# INLINE monopoint #-}
     monopoint :: a -> Either e a
-    monopoint = pure
+    monopoint = Right
 
-instance MonoPointed a (Seq a) where
+instance MonoPointed a (Seq.Seq a) where
     {-# INLINE monopoint #-}
-    monopoint :: a -> Seq a
-    monopoint = pure
+    monopoint :: a -> Seq.Seq a
+    monopoint = Seq.singleton
 
-instance MonoPointed a (Vector a) where
+instance MonoPointed a (Vector.Vector a) where
     {-# INLINE monopoint #-}
-    monopoint :: a -> Vector a
-    monopoint = pure
+    monopoint :: a -> Vector.Vector a
+    monopoint = Vector.singleton
 
 instance MonoPointed a (SVector.Vector a) where
     {-# INLINE monopoint #-}
     monopoint :: a -> SVector.Vector a
-    monopoint = pure
+    monopoint = SVector.singleton
 
 instance UVector.Unbox a => MonoPointed a (UVector.Vector a) where
     {-# INLINE monopoint #-}
