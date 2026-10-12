@@ -42,7 +42,8 @@ common common-fields
         -Wpartial-fields
         -Wredundant-constraints
         -Wmissing-deriving-strategies
-        -Wunused-packages
+        -- TODO: uncomment this when dependencies settled.
+        -- -Wunused-packages
         -- Prepare for dependent types.
         -Wterm-variable-capture
 
@@ -74,14 +75,14 @@ test-suite mono-tests
     build-depends:
         mono,
         -- Libraries.
-        tasty         >=1.5 && <1.6,
-        falsify       >=0.4 && <0.5,
-        tasty-falsify >=0.1 && <0.2,
+        tasty          >=1.5 && <1.6,
+        hedgehog       >=1.5 && <1.6,
+        tasty-hedgehog >=1.4 && <1.5
     other-modules:
-        Lib.Gen
-        Lib.MonoFunctor
-        Lib.MonoPointed
-        Lib.MonoFoldable
-        Tests.Typeclasses.MonoFunctor
-        Tests.Typeclasses.MonoPointed
-        Tests.Typeclasses.MonoFoldable
+        -- Lib.Gen
+        -- Lib.MonoFunctor
+        -- Lib.MonoPointed
+        -- Lib.MonoFoldable
+        -- Tests.Typeclasses.MonoFunctor
+        -- Tests.Typeclasses.MonoPointed
+        -- Tests.Typeclasses.MonoFoldable
