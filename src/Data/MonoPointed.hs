@@ -1,10 +1,10 @@
 {- |
-Module: Mono.Typeclasses.MonoPointed
+Module: Data.MonoPointed
 
 The @MonoPointed@ typeclass.
 -}
 
-module Mono.Typeclasses.MonoPointed (
+module Data.MonoPointed (
     -- * Typeclasses.
     MonoPointed (..),
 ) where
@@ -28,7 +28,7 @@ import qualified Data.Vector.Unboxed as UVector (Vector, Unbox, singleton)
 import qualified Data.Vector.Storable as StVector (Vector, Storable, singleton)
 
 -- Package.
-import Mono.Typeclasses.MonoFunctor (MonoFunctor)
+import Data.MonoFunctor (MonoFunctor)
 
 
 {- | The @MonoPointed@ typeclass.

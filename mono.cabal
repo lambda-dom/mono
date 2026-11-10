@@ -61,9 +61,9 @@ library
     hs-source-dirs:
         src
     exposed-modules:
-        Mono.Typeclasses.MonoFunctor
-        Mono.Typeclasses.MonoPointed
-        Mono.Typeclasses.MonoFoldable
+        Data.MonoFunctor
+        Data.MonoPointed
+        Data.MonoFoldable
 
 test-suite mono-tests
     import:
@@ -83,6 +83,6 @@ test-suite mono-tests
         Lib.MonoFunctor
         Lib.MonoPointed
         Lib.MonoFoldable
-        Tests.Typeclasses.MonoFunctor
-        Tests.Typeclasses.MonoPointed
-        Tests.Typeclasses.MonoFoldable
+        Tests.MonoFunctor
+        Tests.MonoPointed
+        Tests.MonoFoldable
