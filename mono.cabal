@@ -31,7 +31,6 @@ common common-fields
         -- Libraries.
         bytestring  >=0.12   && <0.13,
         text        >=2.1    && <2.2,
-        optics-core >= 0.4.2 && <0.4.3,
     ghc-options:
         -Wall
         -Wcompat
@@ -56,14 +55,15 @@ library
         FunctionalDependencies
     build-depends:
         -- Libraries.
-        containers >=0.7  && <0.8,
-        vector     >=0.13 && <0.14,
+        containers  >=0.7  && <0.8,
+        vector      >=0.13 && <0.14,
+        optics-core >= 0.4.2 && <0.4.3,
     hs-source-dirs:
         src
     exposed-modules:
-        Mono.Typeclasses.MonoFunctor
-        Mono.Typeclasses.MonoPointed
-        Mono.Typeclasses.MonoFoldable
+        Data.MonoFunctor
+        Data.MonoPointed
+        Data.MonoFoldable
 
 test-suite mono-tests
     import:
@@ -83,6 +83,6 @@ test-suite mono-tests
         Lib.MonoFunctor
         Lib.MonoPointed
         Lib.MonoFoldable
-        Tests.Typeclasses.MonoFunctor
-        Tests.Typeclasses.MonoPointed
-        Tests.Typeclasses.MonoFoldable
+        Tests.MonoFunctor
+        Tests.MonoPointed
+        Tests.MonoFoldable

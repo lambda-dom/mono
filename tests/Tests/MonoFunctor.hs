@@ -1,4 +1,4 @@
-module Tests.Typeclasses.MonoFunctor (
+module Tests.MonoFunctor (
     -- * Tests.
     tests,
 ) where

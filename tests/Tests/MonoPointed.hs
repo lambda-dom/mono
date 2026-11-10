@@ -1,4 +1,4 @@
-module Tests.Typeclasses.MonoPointed (
+module Tests.MonoPointed (
     -- * Tests.
     tests,
 ) where
