@@ -54,6 +54,7 @@ library
         DerivingStrategies
         TypeFamilies
         FunctionalDependencies
+        RequiredTypeArguments
     build-depends:
         -- Libraries.
         containers >=0.7  && <0.8,
@@ -61,6 +62,7 @@ library
     hs-source-dirs:
         src
     exposed-modules:
+        Mono.Bits
         Data.MonoFunctor
         Data.MonoPointed
         Data.MonoFoldable

@@ -57,7 +57,6 @@ instance MonoFunctor a (Either e a) where
     monomap :: (a -> a) -> Either e a -> Either e a
     monomap = fmap
 
-
 -- Libraries.
 instance MonoFunctor Word8 Bytes.ByteString where
     {-# INLINE monomap #-}
