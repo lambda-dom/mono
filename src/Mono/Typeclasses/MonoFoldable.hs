@@ -7,11 +7,19 @@ The @MonoFoldable@ typeclass.
 module Mono.Typeclasses.MonoFoldable (
     -- * Typeclasses.
     MonoFoldable (..),
+
+    -- ** Actions.
+    monotraverse_,
+    monomapM_,
+
+    -- ** Optics.
+    toFold,
 ) where
 
 -- Imports.
 -- Base.
 import Data.Foldable (Foldable (..))
+import Data.Int (Int64)
 import Data.List (singleton)
 import Data.List.NonEmpty (NonEmpty)
 import Data.Maybe (isNothing)
@@ -28,6 +36,7 @@ import Data.Vector (Vector)
 import qualified Data.Vector.Strict as SVector (Vector)
 import qualified Data.Vector.Unboxed as UVector (Vector, Unbox, toList, null, length, foldMap', foldl', foldr, elem)
 import qualified Data.Vector.Storable as StVector (Vector, Storable, toList, null, length, foldMap', foldl', foldr, elem)
+import Optics.Core (Fold, foldVL)
 
 -- Package.
 import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
@@ -45,7 +54,7 @@ If the 'MonoFoldable' is also a 'Mono.Typeclasses.MonoPointed.MonoPointed' then 
 following compatibility codition, where the 'Mono.Typeclasses.MonoPointed.monopoint' on the right
 side is just 'Data.List.Singleton':
 
-__Compatibility__: @'monotoList' . monopoint == monopoint@
+__Monopointed compatibility__: @'monotoList' . monopoint == monopoint@
 -}
 class MonoFunctor a s => MonoFoldable a s where
     {-# MINIMAL monotoList #-}
@@ -268,7 +277,7 @@ instance MonoFoldable Word8 LBytes.ByteString where
     -}
     {-# INLINE monolength #-}
     monolength :: LBytes.ByteString -> Int
-    monolength = fromIntegral . LBytes.length
+    monolength = fromIntegral @Int64 @Int . LBytes.length
 
     {-# INLINE monoelem #-}
     monoelem :: Word8 -> LBytes.ByteString -> Bool
@@ -349,7 +358,7 @@ instance MonoFoldable Char LText.Text where
     -}
     {-# INLINE monolength #-}
     monolength :: LText.Text -> Int
-    monolength = fromIntegral . LText.length
+    monolength = fromIntegral @Int64 @Int . LText.length
 
     {-# INLINE monoelem #-}
     monoelem :: Char -> LText.Text -> Bool
@@ -487,3 +496,24 @@ instance StVector.Storable a => MonoFoldable a (StVector.Vector a) where
     {-# INLINE monoelem #-}
     monoelem :: Eq a => a -> StVector.Vector a -> Bool
     monoelem = StVector.elem
+
+
+{- | The monomorphic version of 'Data.Foldable.traverse_'.
+
+Map each element of the 'MonoFoldable' to an 'Applicative' and evaluate them from left to right,
+ignoring the results.
+-}
+{-# INLINE monotraverse_ #-}
+monotraverse_ :: (MonoFoldable a s, Applicative m) => (a -> m b) -> s -> m () 
+monotraverse_ h = monofoldr (\ x rest -> h x *> rest) $ pure ()
+
+{- | 'monotraverse_' specialized to monads. -}
+{-# INLINE monomapM_ #-}
+monomapM_ :: (MonoFoldable a s, Monad m) => (a -> m b) -> s -> m () 
+monomapM_ h = monofoldr (\ x rest -> h x >> rest) $ pure ()
+
+
+{- | The canonical @'Fold' s a@ determined by a @'MonoFoldable' a s@. -}
+{-# INLINE toFold #-}
+toFold :: MonoFoldable a s => Fold s a
+toFold = foldVL monotraverse_
