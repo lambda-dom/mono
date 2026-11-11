@@ -18,8 +18,8 @@ import Test.Falsify.Generator (Function, Gen, fun)
 import Lib.MonoFunctor (isExtensionallyEqual)
 
 -- Module to test.
-import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
-import Mono.Typeclasses.MonoPointed (MonoPointed (..))
+import Data.MonoFunctor (MonoFunctor (..))
+import Data.MonoPointed (MonoPointed (..))
 
 
 {- | Tests mononaturality of monopoint. -}

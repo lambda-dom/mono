@@ -1,4 +1,4 @@
-module Tests.Typeclasses.MonoFoldable (
+module Tests.MonoFoldable (
     -- * Tests.
     tests,
 ) where

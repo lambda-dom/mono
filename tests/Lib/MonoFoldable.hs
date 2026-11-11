@@ -17,12 +17,14 @@ import Test.Falsify (Property, Gen, Fun, pattern Fn, (.$), gen, assert)
 import Test.Falsify.Generator (Function, fun)
 
 -- Package.
-import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
-import Mono.Typeclasses.MonoPointed (MonoPointed (..))
+import Data.MonoFunctor (MonoFunctor (..))
+import Data.MonoPointed (MonoPointed (..))
+
+-- Testing.
 import Lib.MonoFunctor (isExtensionallyEqual)
 
 -- Module to test.
-import Mono.Typeclasses.MonoFoldable (MonoFoldable (..))
+import Data.MonoFoldable (MonoFoldable (..))
 
 
 {- | Test mononaturality of monotoList. -}

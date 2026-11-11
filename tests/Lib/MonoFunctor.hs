@@ -26,7 +26,7 @@ import Test.Falsify.Generator (Function, fun)
 import Test.Falsify.Predicate (satisfies)
 
 -- Module to test.
-import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
+import Data.MonoFunctor (MonoFunctor (..))
 
 
 {- | Predicate for functional, extensional equality of functions. -}

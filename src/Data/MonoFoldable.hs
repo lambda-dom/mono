@@ -1,10 +1,10 @@
 {- |
-Module: Mono.Typeclasses.MonoFoldable
+Module: Data.MonoFoldable
 
 The @MonoFoldable@ typeclass.
 -}
 
-module Mono.Typeclasses.MonoFoldable (
+module Data.MonoFoldable (
     -- * Typeclasses.
     MonoFoldable (..),
 
@@ -39,7 +39,7 @@ import qualified Data.Vector.Storable as StVector (Vector, Storable, toList, nul
 import Optics.Core (Fold, foldVL)
 
 -- Package.
-import Mono.Typeclasses.MonoFunctor (MonoFunctor (..))
+import Data.MonoFunctor (MonoFunctor (..))
 
 
 {- | The typeclass for monofunctors that can be folded over, the monomorphic version of 'Foldable'.
